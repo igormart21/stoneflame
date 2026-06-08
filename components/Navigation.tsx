@@ -3,18 +3,22 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useCart } from "@/lib/context/CartContext";
+import { ShoppingCart } from "lucide-react";
 
 const links = [
-  { label: "Collection", href: "#collection" },
-  { label: "Our Story", href: "#story" },
-  { label: "Craft", href: "#process" },
-  { label: "Contact", href: "#contact" },
+  { label: "Collection", href: "/#collection" },
+  { label: "Our Story", href: "/#story" },
+  { label: "Craft", href: "/#process" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { cartCount, setIsOpen } = useCart();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -41,7 +45,7 @@ export default function Navigation() {
         <div className="container-xl flex items-center justify-between h-16 md:h-[4.5rem]">
 
           {/* Logo */}
-          <a href="#" className="flex items-center" data-cursor="hover">
+          <Link href="/" className="flex items-center" data-cursor="hover">
             <Image
               src="/logotipo-stoneflame.svg"
               alt="STONEFLAME"
@@ -50,12 +54,12 @@ export default function Navigation() {
               priority
               className="h-9 md:h-10 w-auto object-contain"
             />
-          </a>
+          </Link>
 
           {/* Desktop links */}
           <nav className="hidden md:flex items-center gap-8">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.href}
                 href={l.href}
                 data-cursor="hover"
@@ -63,35 +67,54 @@ export default function Navigation() {
               >
                 {l.label}
                 <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-bronze group-hover:w-full transition-all duration-300" />
-              </a>
+              </Link>
             ))}
           </nav>
 
-          {/* CTA */}
+          {/* Cart Button (Desktop) */}
           <div className="hidden md:flex items-center">
-            <a
-              href={getWhatsAppLink()}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setIsOpen(true)}
               data-cursor="hover"
-              className="font-body text-xs tracking-widest uppercase px-5 py-2.5 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
-              style={{ letterSpacing: "0.15em" }}
+              className="relative p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center hover:scale-105 active:scale-95 transform"
+              aria-label="Open Cart"
             >
-              Order Now
-            </a>
+              <ShoppingCart className="w-5.5 h-5.5 text-stone hover:text-copper transition-colors" />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 bg-copper text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center animate-pulse shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </button>
           </div>
 
-          {/* Hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            data-cursor="hover"
-            className="md:hidden p-2 flex flex-col gap-1.5"
-            aria-label="Menu"
-          >
-            <span className={`block w-5 h-px bg-stone-dark transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
-            <span className={`block w-3.5 h-px bg-stone-dark transition-all duration-300 ${open ? "opacity-0" : ""}`} />
-            <span className={`block w-5 h-px bg-stone-dark transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
-          </button>
+          {/* Cart & Hamburger (Mobile) */}
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              onClick={() => setIsOpen(true)}
+              data-cursor="hover"
+              className="relative p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center"
+              aria-label="Open Cart"
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {cartCount > 0 && (
+                <span className="absolute top-1 right-1 bg-copper text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setOpen(!open)}
+              data-cursor="hover"
+              className="p-2 flex flex-col gap-1.5"
+              aria-label="Menu"
+            >
+              <span className={`block w-5 h-px bg-stone-dark transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
+              <span className={`block w-3.5 h-px bg-stone-dark transition-all duration-300 ${open ? "opacity-0" : ""}`} />
+              <span className={`block w-5 h-px bg-stone-dark transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -107,41 +130,37 @@ export default function Navigation() {
           >
             {/* Logo no menu mobile */}
             <div className="mb-10">
-              <Image
-                src="/logotipo-stoneflame.svg"
-                alt="STONEFLAME"
-                width={200}
-                height={64}
-                className="h-12 w-auto object-contain"
-              />
+              <Link href="/" onClick={() => setOpen(false)}>
+                <Image
+                  src="/logotipo-stoneflame.svg"
+                  alt="STONEFLAME"
+                  width={200}
+                  height={64}
+                  className="h-12 w-auto object-contain"
+                />
+              </Link>
             </div>
 
             <nav className="flex flex-col items-center gap-7">
               {links.map((l, i) => (
-                <motion.a
+                <Link
                   key={l.href}
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className="font-display text-4xl text-stone-dark hover:text-bronze transition-colors"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.05 * i }}
                 >
                   {l.label}
-                </motion.a>
+                </Link>
               ))}
-              <motion.a
+              <a
                 href={getWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setOpen(false)}
                 className="mt-4 font-body text-sm tracking-widest uppercase px-8 py-3 bg-vulcanic text-offwhite"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
               >
                 Order Now
-              </motion.a>
+              </a>
             </nav>
           </motion.div>
         )}
