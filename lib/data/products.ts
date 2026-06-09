@@ -219,10 +219,10 @@ export const products: Product[] = [
     dimensionsNote: "Stone pots are made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
     category: "sets",
     images: [
-      "/products/cookware-set-2-3-4/Conjunto-duas-panelas-de-pedra-sabao-com-panela-de-pressao_f950eeee-b502-487e-b02e-a350eee69be0.jpg",
-      "/products/cookware-set-2-3-4/panela-de-2-litros-de-pedra-sabao_3c118b87-763e-4ca1-a464-ed1c70f8e8ae.jpg",
-      "/products/cookware-set-2-3-4/panela-de-pedra-3-litros-lll_f28ab87a-b3e6-4817-be5a-9e1f972b91f4.jpg",
-      "/products/cookware-set-2-3-4/Panela-de-pressao-de-pedra-4-litros-frente_1bfca15c-cbfa-4461-a7c9-c3b15e1b8a4a.jpg"
+      "/products/cookware-set-2-3-4/set-3-pots.png",
+      "/products/cookware-set-2-3-4/pot-2l.png",
+      "/products/cookware-set-2-3-4/pot-3l.png",
+      "/products/cookware-set-2-3-4/pressure-cooker-4l.png"
     ]
   }
 ];

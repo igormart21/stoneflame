@@ -123,7 +123,7 @@ function ProductCard({ p, index }: ProductCardProps) {
 
         {/* Product visual */}
         <motion.div
-          className="absolute inset-0 flex items-center justify-center p-6"
+          className="absolute inset-0 flex items-center justify-center"
           animate={{ scale: hovered ? 1.05 : 1, y: hovered ? -4 : 0 }}
           transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
@@ -133,7 +133,7 @@ function ProductCard({ p, index }: ProductCardProps) {
                 src={p.images[0]}
                 alt={p.name}
                 fill
-                className="object-contain"
+                className="object-cover"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
             </div>
