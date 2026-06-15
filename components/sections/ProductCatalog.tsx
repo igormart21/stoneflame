@@ -91,6 +91,7 @@ function ProductCard({ p, index }: ProductCardProps) {
       priceStr: p.price,
       capacity: p.capacity,
       index: index,
+      image: p.images?.[0],
     });
   };
 
@@ -112,7 +113,7 @@ function ProductCard({ p, index }: ProductCardProps) {
       data-cursor="hover"
     >
       {/* Image area */}
-      <Link href={`/product/${p.slug}`} className="block relative overflow-hidden" style={{ background: p.bg, height: 220 }}>
+      <Link href={`/product/${p.slug}`} className="block relative overflow-hidden aspect-square" style={{ background: p.bg }}>
         {/* Badge */}
         <div className="absolute top-3 left-3 z-10">
           <span className="font-body text-xs px-2.5 py-1 bg-white text-stone-dark font-medium"
@@ -133,7 +134,7 @@ function ProductCard({ p, index }: ProductCardProps) {
                 src={p.images[0]}
                 alt={p.name}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 50vw, 25vw"
               />
             </div>

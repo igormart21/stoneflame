@@ -97,7 +97,7 @@ export default function SocialProof() {
   const inView = useInView(headerRef, { once: true });
 
   return (
-    <section className="bg-bg section-padding" id="contact">
+    <section className="bg-bg section-padding" id="reviews">
       <div className="container-xl">
 
         {/* Header */}

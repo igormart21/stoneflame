@@ -41,7 +41,7 @@ export default function Footer() {
                 ["Our Story", "#story"],
                 ["The Process", "#process"],
                 ["Find Your Piece", "#quiz"],
-                ["Reviews", "#contact"],
+                ["Reviews", "#reviews"],
               ].map(([l, h]) => (
                 <a key={h} href={h} className="font-body text-sm text-offwhite/40 hover:text-offwhite/80 transition-colors" style={{ fontSize: "0.82rem" }}>{l}</a>
               ))}
@@ -49,7 +49,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
+          <div id="contact" className="scroll-mt-24">
             <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>Order</h4>
             <p className="font-body text-sm text-offwhite/40 leading-relaxed mb-5" style={{ fontSize: "0.82rem" }}>
               All orders are handled personally via WhatsApp. Direct conversation, no checkout.

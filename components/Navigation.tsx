@@ -45,7 +45,17 @@ export default function Navigation() {
         <div className="container-xl flex items-center justify-between h-16 md:h-[4.5rem]">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center" data-cursor="hover">
+          <Link
+            href="/"
+            className="flex items-center"
+            data-cursor="hover"
+            onClick={(e) => {
+              if (window.location.pathname === "/") {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}
+          >
             <Image
               src="/logotipo-stoneflame.svg"
               alt="STONEFLAME"
@@ -130,7 +140,16 @@ export default function Navigation() {
           >
             {/* Logo no menu mobile */}
             <div className="mb-10">
-              <Link href="/" onClick={() => setOpen(false)}>
+              <Link
+                href="/"
+                onClick={(e) => {
+                  setOpen(false);
+                  if (window.location.pathname === "/") {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }
+                }}
+              >
                 <Image
                   src="/logotipo-stoneflame.svg"
                   alt="STONEFLAME"

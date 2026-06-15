@@ -4,6 +4,7 @@ import { useCart } from "@/lib/context/CartContext";
 import { getCartWhatsAppLink } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 
 const silhouettes = [
   // 0 – Grand Pot
@@ -137,12 +138,24 @@ export default function CartDrawer() {
                     key={item.slug}
                     className="flex gap-4 p-4 border border-white/10 rounded-sm bg-white/[0.02] relative group"
                   >
-                    {/* SVG Image Box */}
+                    {/* Product Image Box */}
                     <div
-                      className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 flex items-center justify-center p-2 rounded-sm bg-[#F5F0E8]/90"
+                      className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 flex items-center justify-center overflow-hidden rounded-sm bg-[#F5F0E8]/90 relative"
                       style={{ border: "1px solid rgba(198,124,59,0.15)" }}
                     >
-                      {silhouettes[item.index]}
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center p-2">
+                          {silhouettes[item.index]}
+                        </div>
+                      )}
                     </div>
 
                     {/* Content */}

@@ -96,6 +96,7 @@ export default function ProductPage() {
         priceStr: product.price,
         capacity: product.capacity,
         index: productIndex,
+        image: product.images?.[0],
       });
     }
     // Optional: reset page quantity to 1 after adding.
@@ -177,7 +178,7 @@ export default function ProductPage() {
                         src={img}
                         alt={`Thumbnail ${idx + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-contain p-1"
                         sizes="80px"
                       />
                     </button>

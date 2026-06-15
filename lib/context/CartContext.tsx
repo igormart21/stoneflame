@@ -10,6 +10,7 @@ export interface CartItem {
   quantity: number;
   capacity: string;
   index: number;
+  image?: string;
 }
 
 interface CartContextProps {
