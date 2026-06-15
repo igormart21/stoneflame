@@ -994,5 +994,38 @@ export const products: Product[] = [
       "/products/bowls-8-saucer/single.png",
       "/products/bowls-8-saucer/with-food.png"
     ]
+  },
+  {
+    slug: "stone-water-filter-10l",
+    name: "10-Liter Stone Water Filter",
+    tagline: "Purity, elegance, and tradition",
+    capacity: "10L · Countertop · Residential & Commercial",
+    price: "$399",
+    priceVal: 399,
+    badge: "Wellness",
+    rating: 5,
+    reviews: 22,
+    accent: "#C67C3B",
+    bg: "#F5F0E8",
+    description: "Transform the water quality in your home with the 10-Liter Stone Water Filter. Made from highly durable natural stone, it helps keep water fresh for longer, combining efficiency, beauty, and tradition in a single product. Ideal for homes, offices, and leisure areas, its 10-liter reservoir offers excellent capacity to serve the whole family, reducing the need for constant refilling. Enjoy quality water always available and bring home the perfect combination of tradition, practicality, and well-being — more health, savings, and style for your everyday life.",
+    includes: [
+      "1 x 10-Liter Natural Stone Water Filter",
+      "1 x Faucet",
+      "Compatible with high-efficiency filter candles"
+    ],
+    benefits: [
+      "Cleaner, more pleasant water for daily consumption.",
+      "Keeps water naturally fresh for longer.",
+      "10-liter capacity, ideal for the whole family.",
+      "Resistant material with long-lasting durability.",
+      "Elegant design that matches any environment, with easy installation and maintenance.",
+      "A sustainable alternative to bottled water."
+    ],
+    warranty: "3 months against manufacturing defects.",
+    dimensionsNote: "Made using a completely handcrafted process from natural stone, so slight variations in dimensions, texture, and coloration are normal and make each piece unique.",
+    category: "tableware",
+    images: [
+      "/products/stone-water-filter-10l/main.jpg"
+    ]
   }
 ];
