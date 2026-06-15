@@ -151,17 +151,15 @@ function ProductCard({ p, index }: ProductCardProps) {
           transition={{ duration: 0.35 }}
         />
 
-        {/* Add to Cart quick-add */}
-        <motion.button
+        {/* Add to Cart quick-add — always visible on touch, hover-reveal on desktop */}
+        <button
           onClick={handleAddToCart}
           data-cursor="hover"
-          className="absolute bottom-3 left-3 right-3 py-2.5 text-center font-body text-xs tracking-widest uppercase bg-vulcanic text-offwhite border-none cursor-pointer z-10"
+          className="absolute bottom-3 left-3 right-3 py-2.5 text-center font-body text-xs tracking-widest uppercase bg-vulcanic text-offwhite border-none cursor-pointer z-10 transition-all duration-250 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
           style={{ letterSpacing: "0.15em", fontSize: "0.68rem" }}
-          initial={{ opacity: 0, y: 8 }} animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
-          transition={{ duration: 0.25 }}
         >
           Add to Cart
-        </motion.button>
+        </button>
       </Link>
 
       {/* Info */}
@@ -172,7 +170,7 @@ function ProductCard({ p, index }: ProductCardProps) {
         </div>
 
         <Link href={`/product/${p.slug}`} className="block group">
-          <h3 className="font-display text-xl text-stone-dark leading-tight mb-1 group-hover:text-bronze transition-colors duration-300">
+          <h3 className="font-display text-base md:text-xl text-stone-dark leading-tight mb-1 group-hover:text-bronze transition-colors duration-300">
             {p.name}
           </h3>
         </Link>

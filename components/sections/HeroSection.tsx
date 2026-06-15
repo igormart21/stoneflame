@@ -81,7 +81,7 @@ export default function HeroSection() {
           onClick={prevSlide}
           aria-label="Previous slide"
           data-cursor="hover"
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/30 hover:bg-black/60 border border-white/10 text-white backdrop-blur-sm opacity-0 group-hover/hero:opacity-100 transition-all duration-300 transform active:scale-95"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/30 hover:bg-black/60 border border-white/10 text-white backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover/hero:opacity-100 transition-all duration-300 transform active:scale-95"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
@@ -89,7 +89,7 @@ export default function HeroSection() {
           onClick={nextSlide}
           aria-label="Next slide"
           data-cursor="hover"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/30 hover:bg-black/60 border border-white/10 text-white backdrop-blur-sm opacity-0 group-hover/hero:opacity-100 transition-all duration-300 transform active:scale-95"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center bg-black/30 hover:bg-black/60 border border-white/10 text-white backdrop-blur-sm opacity-100 md:opacity-0 md:group-hover/hero:opacity-100 transition-all duration-300 transform active:scale-95"
         >
           <ChevronRight className="w-6 h-6" />
         </button>
