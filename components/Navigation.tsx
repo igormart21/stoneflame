@@ -6,7 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Search } from "lucide-react";
+import SearchModal from "@/components/SearchModal";
 
 const links = [
   { label: "Collection", href: "/#collection" },
@@ -18,6 +19,7 @@ const links = [
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { cartCount, setIsOpen } = useCart();
 
   useEffect(() => {
@@ -81,8 +83,16 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {/* Cart Button (Desktop) */}
-          <div className="hidden md:flex items-center">
+          {/* Search + Cart Button (Desktop) */}
+          <div className="hidden md:flex items-center gap-1">
+            <button
+              onClick={() => setSearchOpen(true)}
+              data-cursor="hover"
+              className="p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center hover:scale-105 active:scale-95 transform"
+              aria-label="Search products"
+            >
+              <Search className="w-5 h-5" />
+            </button>
             <button
               onClick={() => setIsOpen(true)}
               data-cursor="hover"
@@ -98,8 +108,16 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* Cart & Hamburger (Mobile) */}
-          <div className="flex items-center gap-2 md:hidden">
+          {/* Search, Cart & Hamburger (Mobile) */}
+          <div className="flex items-center gap-1 md:hidden">
+            <button
+              onClick={() => setSearchOpen(true)}
+              data-cursor="hover"
+              className="p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center"
+              aria-label="Search products"
+            >
+              <Search className="w-5 h-5" />
+            </button>
             <button
               onClick={() => setIsOpen(true)}
               data-cursor="hover"
@@ -127,6 +145,9 @@ export default function Navigation() {
           </div>
         </div>
       </header>
+
+      {/* Smart product search */}
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Mobile menu */}
       <AnimatePresence>
