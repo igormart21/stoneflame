@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/sections/HeroSection";
 import ProductCategories from "@/components/sections/ProductCategories";
@@ -37,32 +36,6 @@ export default function Home() {
         <StorytellingSection />
         <FeaturesSection />
         <ProcessTimeline />
-        
-        {/* Middle volcanic banner above Quiz */}
-        <section className="w-full relative bg-bg border-t border-b border-stone-border/20">
-          {/* Desktop Banner */}
-          <div className="hidden md:block w-full relative aspect-[1536/1024]">
-            <Image
-              src="/banner-quiz.png"
-              alt="STONEFLAME Artisanal Kitchen Banner"
-              fill
-              priority
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-          {/* Mobile Banner */}
-          <div className="block md:hidden w-full relative aspect-[863/1823]">
-            <Image
-              src="/banner-quiz-mobile.png"
-              alt="STONEFLAME Artisanal Kitchen Banner Mobile"
-              fill
-              priority
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-        </section>
 
         <QuizSection />
         <SocialProof />

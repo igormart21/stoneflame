@@ -762,7 +762,7 @@ export const products: Product[] = [
     ],
     warranty: "3 months against manufacturing defects.",
     dimensionsNote: "Made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
-    category: "sets",
+    category: "grills",
     images: [
       "/products/fondue-set/main.png",
       "/products/fondue-set/pot-rechaud.png",
@@ -801,7 +801,7 @@ export const products: Product[] = [
     ],
     warranty: "3 months against manufacturing defects.",
     dimensionsNote: "Made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
-    category: "sets",
+    category: "grills",
     images: [
       "/products/fondue-set-27cm/main.png",
       "/products/fondue-set-27cm/pot-rechaud.png",
@@ -839,7 +839,7 @@ export const products: Product[] = [
     ],
     warranty: "3 months against manufacturing defects.",
     dimensionsNote: "Made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
-    category: "sets",
+    category: "grills",
     images: [
       "/products/fondue-kit/main.png"
     ]
@@ -875,7 +875,7 @@ export const products: Product[] = [
     ],
     warranty: "3 months against manufacturing defects.",
     dimensionsNote: "Stone pots are made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
-    category: "sets",
+    category: "grills",
     images: [
       "/products/complete-fondue-set-32cm/main.png",
       "/products/complete-fondue-set-32cm/alt.png",
@@ -915,7 +915,7 @@ export const products: Product[] = [
     ],
     warranty: "3 months against manufacturing defects.",
     dimensionsNote: "Soapstone pieces are shipped new in their natural state (ash) and need to go through a curing process before first use — after curing, your piece will be permanently black (a step-by-step curing manual is included). Stone pots are made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
-    category: "sets",
+    category: "grills",
     images: [
       "/products/complete-fondue-set-27cm/main.png",
       "/products/complete-fondue-set-27cm/alt.png",
@@ -1025,7 +1025,7 @@ export const products: Product[] = [
     dimensionsNote: "Made using a completely handcrafted process from natural stone, so slight variations in dimensions, texture, and coloration are normal and make each piece unique.",
     category: "tableware",
     images: [
-      "/products/stone-water-filter-10l/main.jpg"
+      "/products/stone-water-filter-10l/main-v2.png"
     ]
   }
 ];
