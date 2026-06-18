@@ -50,10 +50,10 @@ export const products: Product[] = [
     dimensionsNote: "Stone pots are made using a completely handcrafted process, so there may be slight variations in the dimensions of the pieces.",
     category: "sets",
     images: [
-      "/products/cookware-set-2-3-4/set-3-pots-v3.png",
-      "/products/cookware-set-2-3-4/pot-2l-v2.png",
-      "/products/cookware-set-2-3-4/pot-3l-v4.png",
-      "/products/cookware-set-2-3-4/pressure-cooker-4l-v2.png"
+      "/products/cookware-set-2-3-4/c8dc39b1-cc28-4c63-880e-6cf6a48e23af.png",
+      "/products/cookware-set-2-3-4/main.webp",
+      "/products/cookware-set-2-3-4/e60c674f-37a4-4875-9217-abbe76d49ffc.png",
+      "/products/cookware-set-2-3-4/ba8b264a-eaec-4529-83da-3090c2b32180.png"
     ]
   },
   {
@@ -85,9 +85,8 @@ export const products: Product[] = [
     dimensionsNote: "Because each stone piece is completely handcrafted, slight variations in dimensions, texture, and coloration are normal and make your piece unique.",
     category: "pressure-cookers",
     images: [
-      "/products/pressure-cooker-7l/main.png",
-      "/products/pressure-cooker-7l/angle-2.png",
-      "/products/pressure-cooker-7l/angle-3.png"
+      "/products/pressure-cooker-7l/71f4f50d-86c3-4100-bcc0-4b7ba38cf831.png",
+      "/products/pressure-cooker-7l/58cbe706-93ca-4765-b497-5b0d6baaf71e.png"
     ]
   },
   {
@@ -119,9 +118,9 @@ export const products: Product[] = [
     dimensionsNote: "Because each stone piece is completely handcrafted, slight variations in dimensions, texture, and coloration are normal and make your piece unique.",
     category: "pressure-cookers",
     images: [
-      "/products/pressure-cooker-5l/main.png",
-      "/products/pressure-cooker-5l/angle-2.png",
-      "/products/pressure-cooker-5l/angle-3.png"
+      "/products/pressure-cooker-5l/58cbe706-93ca-4765-b497-5b0d6baaf71e.png",
+      "/products/pressure-cooker-5l/84b7f1f4-3efd-4e25-a001-3cecb66af6fb.png",
+      "/products/pressure-cooker-5l/b0bb45a2-3d0d-4fcd-b3f3-e5de5c2767ae.png"
     ]
   },
   {
@@ -153,8 +152,8 @@ export const products: Product[] = [
     dimensionsNote: "Because each stone piece is completely handcrafted, slight variations in dimensions, texture, and coloration are normal and make your piece unique.",
     category: "pressure-cookers",
     images: [
-      "/products/pressure-cooker-4l/main.png",
-      "/products/pressure-cooker-4l/open-lid.png"
+      "/products/pressure-cooker-4l/c3880ee0-df6f-4be7-9285-dd92546b3c9e.png",
+      "/products/pressure-cooker-4l/afb242e7-6ddb-41e2-b71f-3a682cfa704f.png"
     ]
   },
   {
@@ -547,11 +546,11 @@ export const products: Product[] = [
     dimensionsNote: "Stone pots are made using an entirely handcrafted process, therefore the pieces are measured in liters, which may result in slight variations in dimensions.",
     category: "sets",
     images: [
-      "/products/versatile-kitchen-set/main.png",
-      "/products/versatile-kitchen-set/frying-pan.png",
-      "/products/versatile-kitchen-set/pressure-cooker.png",
-      "/products/versatile-kitchen-set/pot.png",
-      "/products/versatile-kitchen-set/mortar.png"
+      "/products/versatile-kitchen-set/bef0be49-6830-4fdb-9e27-9a3015b0819e.png",
+      "/products/versatile-kitchen-set/bf976d75-b773-4636-9f8e-970b2daec199.png",
+      "/products/versatile-kitchen-set/545277a0-8d9a-41ba-b7b1-d38fdba8b0c8.png",
+      "/products/versatile-kitchen-set/99dbb07c-f578-4195-abf0-b7d10d86c917.png",
+      "/products/versatile-kitchen-set/87b5fb5f-8e0e-40b2-aee6-ec80a64acd1a.png"
     ]
   },
   {
@@ -585,13 +584,13 @@ export const products: Product[] = [
     dimensionsNote: "As this is a 100% handcrafted product, slight variations in measurements, capacity, and design may occur, making each piece unique. We start the curing process before shipping, and you will need to complete it by following our instructions.",
     category: "sets",
     images: [
-      "/products/osmenino-set/main.png",
-      "/products/osmenino-set/pressure-cooker.png",
-      "/products/osmenino-set/pot-1.png",
-      "/products/osmenino-set/pot-2.png",
-      "/products/osmenino-set/pot-3l-specs.png",
-      "/products/osmenino-set/pot-2l-specs.png",
-      "/products/osmenino-set/frying-pan-specs.png"
+      "/products/osmenino-set/8442a4c4-3200-4412-834f-ee5079b6e1b8.png",
+      "/products/osmenino-set/e5469dc7-12b9-4f7c-9474-7845cf33155a.png",
+      "/products/osmenino-set/8702a595-3054-4716-9e23-c1745eaca1eb.png",
+      "/products/osmenino-set/b7b34a78-b901-4352-a6f8-f29dddc8d002.png",
+      "/products/osmenino-set/03796fa8-6905-4d32-bbc2-6276e145b215.png",
+      "/products/osmenino-set/89dc5b44-8191-4b6b-b3d7-0a90f311986a.png",
+      "/products/osmenino-set/f9d99df5-c5ae-48da-8b97-dcecda0662dd.png"
     ]
   },
   {

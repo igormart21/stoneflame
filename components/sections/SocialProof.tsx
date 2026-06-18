@@ -138,58 +138,6 @@ export default function SocialProof() {
           ))}
         </div>
 
-        {/* ── Best Sellers strip (like the reference "Best sellers" section) ── */}
-        <div className="mt-4 pt-12 border-t border-stone-border">
-          <motion.div className="mb-8"
-            initial={{ opacity:0, y:16 }} animate={inView ? { opacity:1, y:0 } : {}}
-            transition={{ delay:0.5, duration:0.6 }}>
-            <p className="font-body text-xs text-stone/60 mb-1" style={{letterSpacing:"0.05em"}}>Our most loved</p>
-            <div className="flex items-baseline gap-3">
-              <h3 className="font-display font-light text-3xl md:text-4xl text-stone-dark">Best</h3>
-              <span className="font-body text-sm text-stone/50">×</span>
-              <h3 className="font-display font-light text-3xl md:text-4xl text-bronze italic">Sellers</h3>
-            </div>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { name:"Vulcanic Grand Pot", price:"From $480", badge:"#1" },
-              { name:"Stone Dutch Oven", price:"From $360", badge:"#2" },
-              { name:"Artisan Skillet", price:"From $240", badge:"#3" },
-              { name:"Mini Cocotte", price:"From $160", badge:"Gift" },
-            ].map((item, i) => (
-              <motion.a
-                key={item.name}
-                href={getWhatsAppLink(`Hello, I am interested in the StoneFlame ${item.name}. Could you provide more info?`)}
-                target="_blank" rel="noopener noreferrer" data-cursor="hover"
-                className="group bg-card p-4 flex flex-col gap-2 hover:border-bronze transition-all duration-300"
-                style={{ border:"1px solid #EDE7DC", boxShadow:"0 1px 4px rgba(26,18,8,0.04)" }}
-                initial={{ opacity:0, y:20 }} animate={inView ? { opacity:1, y:0 } : {}}
-                transition={{ delay: 0.55 + i * 0.07 }}
-              >
-                {/* Visual */}
-                <div className="rounded-sm h-28 flex items-center justify-center" style={{ background:"#F5F0E8" }}>
-                  <div className="font-display text-4xl font-light" style={{
-                    background:"linear-gradient(135deg,rgba(163,109,58,0.3),rgba(198,124,59,0.3))",
-                    WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text",
-                  }}>
-                    {["I","II","III","IV"][i]}
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-1">
-                  <span className="font-body text-xs font-medium text-stone bg-bg-secondary px-2 py-0.5 rounded-sm"
-                    style={{fontSize:"0.68rem"}}>{item.badge}</span>
-                </div>
-                <p className="font-display text-base text-stone-dark group-hover:text-bronze transition-colors">{item.name}</p>
-                <p className="font-display text-sm font-light" style={{
-                  background:"linear-gradient(135deg,#A36D3A,#C67C3B)",
-                  WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text",
-                }}>{item.price}</p>
-              </motion.a>
-            ))}
-          </div>
-        </div>
-
         {/* Final CTA */}
         <motion.div
           className="mt-16 text-center"

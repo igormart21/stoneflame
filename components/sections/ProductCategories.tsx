@@ -10,10 +10,10 @@ const categories = [
     enName: "Frying Pans",
     ptName: "Frigideiras",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         <ellipse cx="45" cy="54" rx="26" ry="10" />
         <path d="M69 51 L92 32" strokeLinecap="round" strokeWidth="1.5" />
-        <ellipse cx="45" cy="52" rx="22" ry="8" strokeDasharray="3 2" opacity="0.6" />
+        <ellipse cx="45" cy="52" rx="22" ry="8" strokeDasharray="3 2" opacity="0.92" />
       </svg>
     ),
   },
@@ -22,7 +22,7 @@ const categories = [
     enName: "Artisanal Pots",
     ptName: "Panelas",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         <path d="M25 45h50v25c0 8-12 12-25 12S25 78 25 70V45z" />
         <ellipse cx="50" cy="45" rx="25" ry="8" fill="rgba(198,124,59,0.04)" />
         <path d="M16 48h9M75 48h9" strokeLinecap="round" strokeWidth="1.8" />
@@ -35,10 +35,10 @@ const categories = [
     enName: "Cookware Sets",
     ptName: "Jogos de Panelas",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         {/* Back Pot */}
-        <path d="M38 38h38v18c0 4-8 6.5-19 6.5S38 60 38 56V38z" opacity="0.4" />
-        <ellipse cx="57" cy="38" rx="19" ry="5" opacity="0.4" />
+        <path d="M38 38h38v18c0 4-8 6.5-19 6.5S38 60 38 56V38z" opacity="0.92" />
+        <ellipse cx="57" cy="38" rx="19" ry="5" opacity="0.92" />
         {/* Front Pot */}
         <path d="M20 52h38v20c0 5-8 8.5-19 8.5S20 77 20 72V52z" />
         <ellipse cx="39" cy="52" rx="19" ry="5.5" fill="rgba(198,124,59,0.04)" />
@@ -51,7 +51,7 @@ const categories = [
     enName: "Pressure Cookers",
     ptName: "Panelas de Pressão",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         <path d="M30 52h40v20c0 6-9 9.5-20 9.5S30 78 30 72V52z" />
         <ellipse cx="50" cy="52" rx="20" ry="5" />
         {/* Lid and Valve */}
@@ -67,9 +67,9 @@ const categories = [
     enName: "Grills & Fondues",
     ptName: "Formas e Grelhas",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         <rect x="25" y="35" width="50" height="38" rx="3" />
-        <path d="M31 35v38M37 35v38M43 35v38M49 35v38M55 35v38M61 35v38M67 35v38" opacity="0.3" />
+        <path d="M31 35v38M37 35v38M43 35v38M49 35v38M55 35v38M61 35v38M67 35v38" opacity="0.92" />
         <path d="M19 54h6M75 54h6" strokeLinecap="round" strokeWidth="1.8" />
       </svg>
     ),
@@ -79,12 +79,12 @@ const categories = [
     enName: "Tableware",
     ptName: "Mesa",
     icon: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 text-copper transition-colors" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <svg viewBox="0 0 100 100" className="w-16 h-16 transition-colors" fill="none" stroke="currentColor" strokeWidth="2.6">
         <circle cx="50" cy="50" r="28" />
-        <circle cx="50" cy="50" r="21" strokeDasharray="3 2" opacity="0.5" />
+        <circle cx="50" cy="50" r="21" strokeDasharray="3 2" opacity="0.92" />
         {/* Fork & Knife */}
-        <path d="M15 36v28M15 36h3M18 36v12" opacity="0.3" strokeLinecap="round" />
-        <path d="M83 34v32 M80 34h3v10" opacity="0.3" strokeLinecap="round" />
+        <path d="M15 36v28M15 36h3M18 36v12" opacity="0.92" strokeLinecap="round" />
+        <path d="M83 34v32 M80 34h3v10" opacity="0.92" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -157,11 +157,11 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
                 }}
               >
                 {/* Icon Area */}
-                <div 
-                  className={`w-20 h-20 flex items-center justify-center rounded-full mb-4 bg-bg-secondary transition-colors duration-300 ${
-                    isActive ? "bg-copper/10 text-copper" : "group-hover:bg-copper/5"
+                <div
+                  className={`w-20 h-20 flex items-center justify-center rounded-full mb-4 text-bg transition-colors duration-300 ${
+                    isActive ? "bg-ember-mid" : "bg-copper group-hover:bg-ember-mid"
                   }`}
-                  style={{ border: "1px solid rgba(198,124,59,0.08)" }}
+                  style={{ boxShadow: "0 4px 12px rgba(198,124,59,0.28)" }}
                 >
                   {cat.icon}
                 </div>
@@ -169,12 +169,12 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
                 {/* Names */}
                 <div className="text-center">
                   <span className={`block font-display text-base md:text-lg transition-colors duration-300 ${
-                    isActive ? "text-copper" : "text-stone-dark group-hover:text-copper"
+                    isActive ? "text-ember-mid" : "text-stone-dark group-hover:text-ember-mid"
                   }`}>
                     {cat.enName}
                   </span>
-                  <span className={`block font-body text-[10px] uppercase tracking-widest mt-1 transition-colors ${
-                    isActive ? "text-copper/80" : "text-stone-light/70"
+                  <span className={`block font-body text-[10px] font-medium uppercase tracking-widest mt-1 transition-colors ${
+                    isActive ? "text-ember-mid" : "text-copper group-hover:text-ember-mid"
                   }`}>
                     {cat.ptName}
                   </span>
