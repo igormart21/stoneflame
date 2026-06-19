@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const WHATSAPP_NUMBER = "18475236194";
+export const WHATSAPP_NUMBER = "5511997115117";
 export const WHATSAPP_BASE_MESSAGE =
   "Hello, I would like more information about this StoneFlame cookware.";
 

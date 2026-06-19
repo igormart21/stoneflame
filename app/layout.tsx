@@ -97,7 +97,7 @@ export default function RootLayout({
               description:
                 "Premium handcrafted stone cookware for fire cooking and authentic culinary experiences.",
               url: "https://stoneflame.com",
-              telephone: "+18475236194",
+              telephone: "+5511997115117",
               priceRange: "$$$",
               servesCuisine: "Artisanal Cookware",
               hasOfferCatalog: {

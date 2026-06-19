@@ -33,7 +33,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="font-body text-xs text-bronze hover:text-copper transition-colors"
             >
-              +1 (847) 523-6194
+              +55 (11) 99711-5117
             </a>
           </div>
 
