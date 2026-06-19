@@ -3,45 +3,31 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useT, useDict } from "@/lib/i18n/LanguageContext";
 
 type Step = 0 | 1 | 2;
 
-const q1 = {
-  question: "How many people do you usually cook for?",
-  options: [
-    { label: "2–4 people", sub: "Intimate dinners", value: "small" },
-    { label: "4–8 people", sub: "Family & friends", value: "medium" },
-    { label: "8+ people", sub: "Feasts & gatherings", value: "large" },
-  ],
-};
-const q2 = {
-  question: "Where do you cook most?",
-  options: [
-    { label: "Home Kitchen", sub: "Gas or electric stove", value: "home" },
-    { label: "BBQ & Grill", sub: "Charcoal or wood", value: "bbq" },
-    { label: "Camping", sub: "Open fire outdoors", value: "camping" },
-    { label: "Wood Stove", sub: "Traditional hearth", value: "stove" },
-  ],
-};
+const q1Values = ["small", "medium", "large"];
+const q2Values = ["home", "bbq", "camping", "stove"];
 
-const recs: Record<string, Record<string, { name: string; price: string; desc: string }>> = {
+const recs: Record<string, Record<string, { name: string; priceVal: number; descKey: string }>> = {
   small: {
-    home:    { name:"Stone Mini Cocotte",    price:"From $160", desc:"Elegant single-serve for home." },
-    bbq:     { name:"Artisan Stone Skillet", price:"From $240", desc:"Perfect sear over hot coals." },
-    camping: { name:"Stone Mini Cocotte",    price:"From $160", desc:"Compact and deeply personal." },
-    stove:   { name:"Stone Dutch Oven",      price:"From $360", desc:"Precision heat for everyday cooking." },
+    home:    { name:"Stone Mini Cocotte",    priceVal:160, descKey:"home-serve" },
+    bbq:     { name:"Artisan Stone Skillet", priceVal:240, descKey:"sear-coals" },
+    camping: { name:"Stone Mini Cocotte",    priceVal:160, descKey:"compact" },
+    stove:   { name:"Stone Dutch Oven",      priceVal:360, descKey:"everyday" },
   },
   medium: {
-    home:    { name:"Stone Dutch Oven",      price:"From $360", desc:"The versatile kitchen workhorse." },
-    bbq:     { name:"Vulcanic Grand Pot",    price:"From $480", desc:"Commands the grill." },
-    camping: { name:"Vulcanic Grand Pot",    price:"From $480", desc:"The campfire centerpiece." },
-    stove:   { name:"Volcanic Stone Wok",    price:"From $420", desc:"Stir-fry, braise, roast in one." },
+    home:    { name:"Stone Dutch Oven",      priceVal:360, descKey:"workhorse" },
+    bbq:     { name:"Vulcanic Grand Pot",    priceVal:480, descKey:"grill" },
+    camping: { name:"Vulcanic Grand Pot",    priceVal:480, descKey:"campfire" },
+    stove:   { name:"Volcanic Stone Wok",    priceVal:420, descKey:"stirfry" },
   },
   large: {
-    home:    { name:"Grand Stone Brasier",   price:"From $580", desc:"For the serious entertainer." },
-    bbq:     { name:"Grand Stone Brasier",   price:"From $580", desc:"Built for the pit." },
-    camping: { name:"Vulcanic Grand Pot",    price:"From $480", desc:"Feed the whole camp." },
-    stove:   { name:"Grand Stone Brasier",   price:"From $580", desc:"Long, slow, magnificent." },
+    home:    { name:"Grand Stone Brasier",   priceVal:580, descKey:"entertainer" },
+    bbq:     { name:"Grand Stone Brasier",   priceVal:580, descKey:"pit" },
+    camping: { name:"Vulcanic Grand Pot",    priceVal:480, descKey:"camp" },
+    stove:   { name:"Grand Stone Brasier",   priceVal:580, descKey:"slow" },
   },
 };
 
@@ -49,8 +35,20 @@ export default function QuizSection() {
   const [step, setStep] = useState<Step>(0);
   const [ans1, setAns1] = useState("");
   const [ans2, setAns2] = useState("");
+  const t = useT();
+  const d = useDict();
 
-  const rec = ans1 && ans2 ? recs[ans1]?.[ans2] : null;
+  const q1 = { question: d.quiz.q1.question, options: d.quiz.q1.options.map((o, i) => ({ ...o, value: q1Values[i] })) };
+  const q2 = { question: d.quiz.q2.question, options: d.quiz.q2.options.map((o, i) => ({ ...o, value: q2Values[i] })) };
+
+  const recRaw = ans1 && ans2 ? recs[ans1]?.[ans2] : null;
+  const rec = recRaw
+    ? {
+        name: recRaw.name,
+        price: `${t("common.from")} $${recRaw.priceVal}`,
+        desc: (d.quiz.descs as Record<string, string>)[recRaw.descKey],
+      }
+    : null;
 
   const reset = () => { setStep(0); setAns1(""); setAns2(""); };
 
@@ -65,14 +63,14 @@ export default function QuizSection() {
 
           {/* Header */}
           <p className="font-body text-xs tracking-widest uppercase text-bronze mb-3" style={{letterSpacing:"0.22em"}}>
-            Find Your Piece
+            {t("quiz.eyebrow")}
           </p>
           <h2 className="font-display font-light text-4xl md:text-5xl text-stone-dark mb-3 leading-none">
-            Which stone<br/>
-            <span className="italic text-bronze">chooses you?</span>
+            {t("quiz.titleA")}<br/>
+            <span className="italic text-bronze">{t("quiz.titleB")}</span>
           </h2>
           <p className="font-body text-sm text-stone mb-10 leading-relaxed">
-            Answer two questions. We&apos;ll recommend the perfect StoneFlame piece.
+            {t("quiz.body")}
           </p>
 
           {/* Progress dots */}
@@ -137,7 +135,7 @@ export default function QuizSection() {
                 </div>
                 <button onClick={() => setStep(0)}
                   className="mt-4 font-body text-xs text-stone hover:text-stone-dark transition-colors">
-                  ← Back
+                  {t("quiz.back")}
                 </button>
               </motion.div>
             )}
@@ -154,7 +152,7 @@ export default function QuizSection() {
                     <span className="font-display text-2xl text-bronze">✦</span>
                   </div>
                   <p className="font-body text-xs uppercase tracking-widest text-bronze mb-2" style={{letterSpacing:"0.22em"}}>
-                    Your Perfect Piece
+                    {t("quiz.resultEyebrow")}
                   </p>
                   <h3 className="font-display text-3xl md:text-4xl text-stone-dark mb-2">{rec.name}</h3>
                   <p className="font-display text-xl text-bronze mb-3">{rec.price}</p>
@@ -165,11 +163,11 @@ export default function QuizSection() {
                       data-cursor="hover"
                       className="font-body text-xs tracking-widest uppercase px-8 py-4 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
                       style={{letterSpacing:"0.16em"}}>
-                      Order via WhatsApp
+                      {t("quiz.orderViaWhatsapp")}
                     </a>
                     <button onClick={reset} data-cursor="hover"
                       className="font-body text-xs tracking-wider uppercase px-8 py-4 border border-stone-border text-stone hover:text-stone-dark hover:border-stone transition-colors duration-250">
-                      Retake Quiz
+                      {t("quiz.retake")}
                     </button>
                   </div>
                 </div>

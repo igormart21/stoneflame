@@ -3,62 +3,48 @@
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useT, useDict } from "@/lib/i18n/LanguageContext";
 
-const categories = [
+const tileStyles = [
   {
     num: "01",
-    tag: "Origin",
-    title: "The Stone",
-    sub: "A Pedra",
-    body: "Selected from volcanic formations shaped by millennia. Not all stone qualifies — only the most resilient makes a StoneFlame piece.",
-    cta: "Explore",
     accent: "#A36D3A",
     bg: "radial-gradient(ellipse at 40% 60%, rgba(43,33,24,0.95) 0%, #1a0c04 100%)",
     glow: "rgba(90,90,90,0.4)",
+    href: "#story",
   },
   {
     num: "02",
-    tag: "Craft",
-    title: "The Artistry",
-    sub: "O Artesanato",
-    body: "Every curve is carved by hand over 30+ hours. No molds, no machines. The imperfections are signatures of the artisan.",
-    cta: "Our Process",
     accent: "#C67C3B",
     bg: "radial-gradient(ellipse at 60% 50%, rgba(43,33,24,0.9) 0%, #1a0c04 100%)",
     glow: "rgba(163,109,58,0.45)",
+    href: "#story",
   },
   {
     num: "03",
-    tag: "Element",
-    title: "The Fire",
-    sub: "O Fogo",
-    body: "Stone has coexisted with fire since the beginning. Our cookware retains heat with a patience metal cannot match.",
-    cta: "Shop Fire Pieces",
     accent: "#FF9A4A",
     bg: "radial-gradient(ellipse at 50% 70%, rgba(139,37,0,0.6) 0%, rgba(43,33,24,0.9) 40%, #1a0c04 100%)",
     glow: "rgba(198,124,59,0.55)",
+    href: "#collection",
   },
   {
     num: "04",
-    tag: "Experience",
-    title: "The Ritual",
-    sub: "A Experiência",
-    body: "A meal cooked in stone carries memory. The mineral notes, the caramelization, the ceremony of fire — this is not just cooking.",
-    cta: "Find Your Piece",
     accent: "#C67C3B",
     bg: "radial-gradient(ellipse at 30% 50%, rgba(43,33,24,0.95) 0%, #1a0c04 100%)",
     glow: "rgba(163,109,58,0.4)",
+    href: "#quiz",
   },
 ];
 
-function CategoryTile({ cat, index }: { cat: typeof categories[0]; index: number }) {
+function CategoryTile({ index }: { index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const bgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const d = useDict();
 
-  const isHref = cat.cta === "Shop Fire Pieces" ? "#collection"
-    : cat.cta === "Find Your Piece" ? "#quiz" : "#story";
+  const cat = { ...tileStyles[index], ...d.story.tiles[index] };
+  const isHref = cat.href;
 
   return (
     <motion.div
@@ -132,6 +118,7 @@ function CategoryTile({ cat, index }: { cat: typeof categories[0]; index: number
 export default function StorytellingSection() {
   const headerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headerRef, { once: true });
+  const t = useT();
 
   return (
     <section id="story" className="bg-bg section-padding">
@@ -142,7 +129,7 @@ export default function StorytellingSection() {
           <motion.p className="font-body text-xs text-stone/60 mb-2"
             initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ duration:0.5 }}
             style={{ letterSpacing:"0.05em" }}>
-            The Story Behind Every Piece
+            {t("story.eyebrow")}
           </motion.p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <motion.div
@@ -151,11 +138,11 @@ export default function StorytellingSection() {
             >
               <div className="flex items-baseline gap-3 flex-wrap">
                 <h2 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">
-                  Explore our
+                  {t("story.titleA")}
                 </h2>
                 <span className="font-body text-sm text-stone/50 tracking-widest">×</span>
                 <h2 className="font-display font-light text-4xl md:text-5xl text-bronze leading-none italic">
-                  Collection
+                  {t("story.titleB")}
                 </h2>
               </div>
             </motion.div>
@@ -163,7 +150,7 @@ export default function StorytellingSection() {
               data-cursor="hover"
               className="flex items-center gap-2 font-body text-sm text-stone hover:text-bronze transition-colors duration-250"
               initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ delay:0.3 }}>
-              All stories
+              {t("story.allStories")}
               <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
                 <path d="M3 8H13M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -174,8 +161,8 @@ export default function StorytellingSection() {
 
         {/* Category grid — 2×2 like reference */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5">
-          {categories.map((c, i) => (
-            <CategoryTile key={c.num} cat={c} index={i}/>
+          {tileStyles.map((c, i) => (
+            <CategoryTile key={c.num} index={i}/>
           ))}
         </div>
       </div>

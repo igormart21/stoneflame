@@ -1,9 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useT } from "@/lib/i18n/LanguageContext";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const t = useT();
   return (
     <footer style={{ background: "#1A1208", borderTop: "1px solid rgba(43,33,24,0.8)" }}>
       <div className="container-xl py-14 md:py-16">
@@ -21,7 +25,7 @@ export default function Footer() {
               />
             </div>
             <p className="font-body text-sm text-offwhite/40 leading-relaxed max-w-xs mb-5" style={{ fontSize: "0.8rem" }}>
-              Handcrafted volcanic stone cookware for those who cook with fire, patience, and intention.
+              {t("footer.tagline")}
             </p>
             <a
               href={getWhatsAppLink()}
@@ -35,14 +39,14 @@ export default function Footer() {
 
           {/* Nav */}
           <div>
-            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>Navigate</h4>
+            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>{t("footer.navigate")}</h4>
             <nav className="flex flex-col gap-3">
               {[
-                ["Collection", "#collection"],
-                ["Our Story", "#story"],
-                ["The Process", "#process"],
-                ["Find Your Piece", "#quiz"],
-                ["Reviews", "#reviews"],
+                [t("footer.navLinks.collection"), "#collection"],
+                [t("footer.navLinks.story"), "#story"],
+                [t("footer.navLinks.process"), "#process"],
+                [t("footer.navLinks.quiz"), "#quiz"],
+                [t("footer.navLinks.reviews"), "#reviews"],
               ].map(([l, h]) => (
                 <a key={h} href={h} className="font-body text-sm text-offwhite/40 hover:text-offwhite/80 transition-colors" style={{ fontSize: "0.82rem" }}>{l}</a>
               ))}
@@ -51,12 +55,12 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>Company</h4>
+            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>{t("footer.company")}</h4>
             <nav className="flex flex-col gap-3">
               {[
-                ["About Us", "/about"],
-                ["Mission & Vision", "/about#mission"],
-                ["Our Values", "/about#values"],
+                [t("footer.companyLinks.about"), "/about"],
+                [t("footer.companyLinks.mission"), "/about#mission"],
+                [t("footer.companyLinks.values"), "/about#values"],
               ].map(([l, h]) => (
                 <Link key={h} href={h} className="font-body text-sm text-offwhite/40 hover:text-offwhite/80 transition-colors" style={{ fontSize: "0.82rem" }}>{l}</Link>
               ))}
@@ -65,9 +69,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div id="contact" className="scroll-mt-24">
-            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>Order</h4>
+            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>{t("footer.order")}</h4>
             <p className="font-body text-sm text-offwhite/40 leading-relaxed mb-5" style={{ fontSize: "0.82rem" }}>
-              All orders are handled personally via WhatsApp. Direct conversation, no checkout.
+              {t("footer.orderBody")}
             </p>
             <a
               href={getWhatsAppLink()}
@@ -76,7 +80,7 @@ export default function Footer() {
               className="inline-flex items-center gap-2 font-body text-xs tracking-widest uppercase px-5 py-2.5 border border-bronze/40 text-bronze hover:bg-bronze hover:text-bg transition-all duration-300"
               style={{ letterSpacing: "0.16em" }}
             >
-              Open WhatsApp
+              {t("footer.openWhatsapp")}
             </a>
             <div className="flex items-center gap-4 mt-7">
               <a href="https://instagram.com/stoneflame" target="_blank" rel="noopener noreferrer"
@@ -102,10 +106,10 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-body text-xs text-offwhite/20" style={{ fontSize: "0.7rem" }}>
-            © {year} STONEFLAME. All rights reserved. Handcrafted with fire.
+            © {year} STONEFLAME. {t("footer.rights")}
           </p>
           <p className="font-body text-xs text-offwhite/15" style={{ fontSize: "0.7rem", letterSpacing: "0.08em" }}>
-            Stone Cookware · Volcanic · Artisanal
+            {t("footer.meta")}
           </p>
         </div>
       </div>

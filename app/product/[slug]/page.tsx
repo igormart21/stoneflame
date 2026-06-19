@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { products } from "@/lib/data/products";
+import { useLocalizedProduct } from "@/lib/data/useProducts";
 import { useCart } from "@/lib/context/CartContext";
+import { useT } from "@/lib/i18n/LanguageContext";
 import { ChevronLeft, Plus, Minus, Shield, Sparkles, Heart, Star, Truck, Award, ShoppingBag } from "lucide-react";
 
 const silhouettes = [
@@ -63,9 +64,9 @@ export default function ProductPage() {
   const router = useRouter();
   const slug = params.slug as string;
   const { addToCart } = useCart();
+  const t = useT();
 
-  const productIndex = products.findIndex((p) => p.slug === slug);
-  const product = products[productIndex];
+  const { product, index: productIndex } = useLocalizedProduct(slug);
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"details" | "benefits" | "warranty">("details");
@@ -74,12 +75,12 @@ export default function ProductPage() {
   if (!product) {
     return (
       <div className="min-h-screen bg-bg flex flex-col items-center justify-center">
-        <h1 className="font-display text-3xl mb-4">Product not found</h1>
-        <button 
+        <h1 className="font-display text-3xl mb-4">{t("product.notFound")}</h1>
+        <button
           onClick={() => router.push("/")}
           className="font-body text-xs uppercase tracking-widest px-6 py-3 bg-vulcanic text-offwhite"
         >
-          Back to Home
+          {t("product.backHome")}
         </button>
       </div>
     );
@@ -119,7 +120,7 @@ export default function ProductPage() {
             data-cursor="hover"
             className="flex items-center gap-2 font-body text-xs text-stone hover:text-copper transition-colors duration-250 mb-8 uppercase tracking-widest"
           >
-            <ChevronLeft className="w-4 h-4" /> Back to collection
+            <ChevronLeft className="w-4 h-4" /> {t("product.backCollection")}
           </button>
 
           {/* Product grid split */}
@@ -190,15 +191,15 @@ export default function ProductPage() {
               <div className="grid grid-cols-3 gap-3 w-full mt-4">
                 <div className="flex flex-col items-center justify-center p-4 bg-card border border-stone-border/40 rounded-sm text-center">
                   <Truck className="w-5 h-5 text-copper mb-2" />
-                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">Secure Shipping</span>
+                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">{t("product.secureShipping")}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-card border border-stone-border/40 rounded-sm text-center">
                   <Award className="w-5 h-5 text-copper mb-2" />
-                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">Artisanal Cure</span>
+                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">{t("product.artisanalCure")}</span>
                 </div>
                 <div className="flex flex-col items-center justify-center p-4 bg-card border border-stone-border/40 rounded-sm text-center">
                   <Shield className="w-5 h-5 text-copper mb-2" />
-                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">Natural Stone</span>
+                  <span className="font-body text-[10px] font-semibold text-stone-dark uppercase tracking-wider">{t("product.naturalStone")}</span>
                 </div>
               </div>
             </div>
@@ -217,7 +218,7 @@ export default function ProductPage() {
                       />
                     ))}
                   </div>
-                  <span className="font-body text-xs text-stone">({product.reviews} customer reviews)</span>
+                  <span className="font-body text-xs text-stone">({product.reviews} {t("product.reviews")})</span>
                 </div>
 
                 <h1 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-tight">
@@ -251,11 +252,16 @@ export default function ProductPage() {
                 
                 <div className="space-y-1.5 pl-1.5 border-l-2 border-copper/30">
                   <p className="font-body text-xs text-stone leading-relaxed">
-                    ✓ Shipping calculated at checkout.
+                    {t("product.shippingNote")}
                   </p>
-                  <p className="font-body text-xs text-stone-light leading-relaxed">
-                    ✓ 4 interest-free installments of <strong className="text-stone-dark">${formattedInstallments}</strong>, or from <strong className="text-stone-dark">${monthlyPlan}/mo</strong>.
-                  </p>
+                  <p
+                    className="font-body text-xs text-stone-light leading-relaxed"
+                    dangerouslySetInnerHTML={{
+                      __html: t("product.installments")
+                        .replace("{a}", `<strong class="text-stone-dark">$${formattedInstallments}</strong>`)
+                        .replace("{b}", `<strong class="text-stone-dark">$${monthlyPlan}</strong>`),
+                    }}
+                  />
                 </div>
               </div>
 
@@ -291,7 +297,7 @@ export default function ProductPage() {
                   data-cursor="hover"
                   className="flex-1 py-4 bg-copper text-offwhite hover:bg-copper/95 transition-all duration-300 font-body text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg"
                 >
-                  <ShoppingBag className="w-4 h-4" /> Add to Cart
+                  <ShoppingBag className="w-4 h-4" /> {t("product.addToCart")}
                 </button>
               </div>
 
@@ -300,9 +306,9 @@ export default function ProductPage() {
                 {/* Tab buttons */}
                 <div className="flex border-b border-stone-border/40 gap-6">
                   {([
-                    { id: "details", label: "Details" },
-                    { id: "benefits", label: "Soapstone Benefits" },
-                    { id: "warranty", label: "Warranty & Care" }
+                    { id: "details", label: t("product.tabDetails") },
+                    { id: "benefits", label: t("product.tabBenefits") },
+                    { id: "warranty", label: t("product.tabWarranty") }
                   ] as const).map((tab) => (
                     <button
                       key={tab.id}
@@ -330,7 +336,7 @@ export default function ProductPage() {
                         {product.description}
                       </p>
                       <div>
-                        <strong className="block font-semibold text-stone-dark mb-2 uppercase tracking-wide text-[10px] text-copper">Includes in the set:</strong>
+                        <strong className="block font-semibold text-stone-dark mb-2 uppercase tracking-wide text-[10px] text-copper">{t("product.includes")}</strong>
                         <ul className="list-disc list-inside space-y-1 text-stone-light">
                           {product.includes.map((inc, i) => (
                             <li key={i}>{inc}</li>
@@ -346,7 +352,7 @@ export default function ProductPage() {
                       animate={{ opacity: 1, y: 0 }}
                       className="space-y-3"
                     >
-                      <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px] text-copper">Why cook with Volcanic Soapstone?</strong>
+                      <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px] text-copper">{t("product.benefitsTitle")}</strong>
                       <ul className="space-y-2.5">
                         {product.benefits.map((ben, i) => (
                           <li key={i} className="flex gap-2.5 items-start text-stone-light">
@@ -365,11 +371,11 @@ export default function ProductPage() {
                       className="space-y-4 text-stone-light"
                     >
                       <div>
-                        <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px] text-copper">Warranty Coverage</strong>
+                        <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px] text-copper">{t("product.warrantyTitle")}</strong>
                         <p>{product.warranty}</p>
                       </div>
                       <div className="p-4 bg-bg-secondary rounded-sm border border-stone-border/30">
-                        <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px]">Handcrafted process note:</strong>
+                        <strong className="block font-semibold text-stone-dark mb-1 uppercase tracking-wide text-[10px]">{t("product.processNote")}</strong>
                         <p className="text-[11px] italic leading-relaxed">
                           {product.dimensionsNote}
                         </p>

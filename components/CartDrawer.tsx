@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "@/lib/context/CartContext";
+import { useT } from "@/lib/i18n/LanguageContext";
 import { getCartWhatsAppLink } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
@@ -64,6 +65,7 @@ export default function CartDrawer() {
     cartTotal,
     cartCount,
   } = useCart();
+  const t = useT();
 
   const handleCheckout = () => {
     const link = getCartWhatsAppLink(cart, cartTotal);
@@ -101,14 +103,14 @@ export default function CartDrawer() {
               <div className="flex items-center gap-2">
                 <ShoppingCart className="w-5 h-5 text-copper" />
                 <h2 className="font-display text-2xl text-offwhite font-light">
-                  Shopping Cart
+                  {t("cart.title")}
                 </h2>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
                 data-cursor="hover"
                 className="p-2 -mr-2 text-stone-light hover:text-offwhite transition-colors"
-                aria-label="Close cart"
+                aria-label={t("cart.close")}
               >
                 <X className="w-6 h-6" />
               </button>
@@ -120,16 +122,16 @@ export default function CartDrawer() {
                 <div className="h-full flex flex-col items-center justify-center text-center opacity-65 py-12">
                   <ShoppingCart className="w-12 h-12 text-stone-light/40 mb-4" />
                   <p className="font-display text-xl text-offwhite">
-                    Your cart is empty
+                    {t("cart.empty")}
                   </p>
                   <p className="font-body text-xs text-stone-light mt-1">
-                    Add handcrafted stone pieces to begin
+                    {t("cart.emptySub")}
                   </p>
                   <button
                     onClick={() => setIsOpen(false)}
                     className="mt-6 font-body text-xs uppercase tracking-widest px-6 py-3 border border-copper text-copper hover:bg-copper hover:text-white transition-all duration-300"
                   >
-                    Continue Browsing
+                    {t("cart.continue")}
                   </button>
                 </div>
               ) : (
@@ -168,7 +170,7 @@ export default function CartDrawer() {
                           <button
                             onClick={() => removeFromCart(item.slug)}
                             className="p-1 -mt-1 text-stone-light hover:text-red-400 transition-colors"
-                            aria-label="Remove item"
+                            aria-label={t("cart.remove")}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -190,7 +192,7 @@ export default function CartDrawer() {
                               updateQuantity(item.slug, item.quantity - 1)
                             }
                             className="p-1.5 text-stone-light hover:text-offwhite transition-colors"
-                            aria-label="Decrease quantity"
+                            aria-label={t("cart.decrease")}
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
@@ -202,7 +204,7 @@ export default function CartDrawer() {
                               updateQuantity(item.slug, item.quantity + 1)
                             }
                             className="p-1.5 text-stone-light hover:text-offwhite transition-colors"
-                            aria-label="Increase quantity"
+                            aria-label={t("cart.increase")}
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
@@ -224,7 +226,7 @@ export default function CartDrawer() {
                           </span>
                           {item.quantity > 1 && (
                             <p className="font-body text-[9px] text-stone-light mt-0.5">
-                              (${item.priceVal} each)
+                              (${item.priceVal} {t("cart.each")})
                             </p>
                           )}
                         </div>
@@ -240,17 +242,17 @@ export default function CartDrawer() {
               <div className="p-6 border-t border-white/10 bg-black/40 space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between font-body text-xs text-stone-light">
-                    <span>Subtotal</span>
+                    <span>{t("cart.subtotal")}</span>
                     <span>${cartTotal}</span>
                   </div>
                   <div className="flex justify-between font-body text-xs text-stone-light">
-                    <span>Shipping</span>
-                    <span className="text-copper">Calculated at Checkout</span>
+                    <span>{t("cart.shipping")}</span>
+                    <span className="text-copper">{t("cart.shippingValue")}</span>
                   </div>
                   <div className="h-px bg-white/10 my-2" />
                   <div className="flex justify-between items-baseline">
                     <span className="font-display text-lg text-offwhite font-light">
-                      Total Order
+                      {t("cart.total")}
                     </span>
                     <span
                       className="font-display text-2xl text-copper font-medium"
@@ -272,10 +274,10 @@ export default function CartDrawer() {
                   data-cursor="hover"
                   className="w-full py-4 bg-copper text-offwhite hover:bg-copper/95 transition-all duration-300 font-body text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-2 shadow-lg"
                 >
-                  <ShoppingCart className="w-4 h-4" /> Checkout via WhatsApp
+                  <ShoppingCart className="w-4 h-4" /> {t("cart.checkout")}
                 </button>
                 <p className="text-[10px] text-center text-stone-light">
-                  ✓ Your order will be sent as a formatted message to WhatsApp.
+                  {t("cart.checkoutNote")}
                 </p>
               </div>
             )}

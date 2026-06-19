@@ -6,39 +6,24 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { LoadingScreen } from "@/components/ClientOnlyComponents";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useT, useDict } from "@/lib/i18n/LanguageContext";
 
-const pillars = [
+const pillarStyles = [
   {
     num: "01",
-    tag: "Mission",
-    sub: "Missão",
-    body:
-      "To select and offer superior quality soapstone cookware, ensuring reliability, functionality, and a user experience that enhances the flavor of food.",
     accent: "#A36D3A",
     bg: "radial-gradient(ellipse at 40% 60%, rgba(43,33,24,0.95) 0%, #1a0c04 100%)",
     glow: "rgba(163,109,58,0.4)",
   },
   {
     num: "02",
-    tag: "Vision",
-    sub: "Visão",
-    body:
-      "To be recognized as a leading supplier of soapstone cookware, standing out for our careful product selection, transparency, and commitment to the customer.",
     accent: "#C67C3B",
     bg: "radial-gradient(ellipse at 60% 50%, rgba(139,37,0,0.5) 0%, rgba(43,33,24,0.9) 45%, #1a0c04 100%)",
     glow: "rgba(198,124,59,0.5)",
   },
 ];
 
-const values = [
-  "Responsible supplier selection",
-  "Quality and durability of the products",
-  "Transparency and trust",
-  "Respect for tradition and natural materials",
-  "Focus on customer experience and satisfaction",
-];
-
-function PillarTile({ p, index }: { p: typeof pillars[0]; index: number }) {
+function PillarTile({ p, index }: { p: { num: string; accent: string; bg: string; glow: string; tag: string; sub: string; body: string }; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-8%" });
 
@@ -108,6 +93,12 @@ export default function AboutPage() {
   const introInView = useInView(introRef, { once: true });
   const valuesRef = useRef<HTMLDivElement>(null);
   const valuesInView = useInView(valuesRef, { once: true, margin: "-8%" });
+  const t = useT();
+  const d = useDict();
+  const pillars = [
+    { ...pillarStyles[0], ...d.about.mission },
+    { ...pillarStyles[1], ...d.about.vision },
+  ];
 
   return (
     <>
@@ -125,7 +116,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.5 }}
                 style={{ letterSpacing: "0.05em" }}
               >
-                Our Company
+                {t("about.eyebrow")}
               </motion.p>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -133,9 +124,9 @@ export default function AboutPage() {
                 transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.1 }}
               >
                 <div className="flex items-baseline gap-3 flex-wrap">
-                  <h1 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">About</h1>
+                  <h1 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">{t("about.titleA")}</h1>
                   <span className="font-body text-sm text-stone/50 tracking-widest">×</span>
-                  <h1 className="font-display font-light text-4xl md:text-5xl text-bronze leading-none italic">Stone Flame</h1>
+                  <h1 className="font-display font-light text-4xl md:text-5xl text-bronze leading-none italic">{t("about.titleB")}</h1>
                 </div>
               </motion.div>
               <div className="mt-6 h-px" style={{ background: "linear-gradient(90deg,#C67C3B,#EDE7DC,transparent)" }} />
@@ -148,12 +139,10 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: 0.2 }}
             >
               <p className="font-display font-light text-xl md:text-2xl text-stone-dark leading-relaxed mb-6">
-                Stone Flame is a company specializing in the resale of soapstone cookware.
+                {t("about.lead")}
               </p>
               <p className="font-body text-base text-stone leading-relaxed" style={{ fontSize: "0.95rem" }}>
-                We choose our suppliers with attention to quality standards, durability, and thermal
-                performance. Our role is to connect traditional and functional products to customers
-                seeking a healthier, more authentic, and reliable cooking experience.
+                {t("about.body")}
               </p>
             </motion.div>
           </div>
@@ -180,7 +169,7 @@ export default function AboutPage() {
               transition={{ duration: 0.5 }}
               style={{ letterSpacing: "0.05em" }}
             >
-              What guides us
+              {t("about.valuesEyebrow")}
             </motion.p>
             <motion.div
               className="flex items-baseline gap-3 flex-wrap mb-8"
@@ -188,13 +177,13 @@ export default function AboutPage() {
               animate={valuesInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.1 }}
             >
-              <h2 className="font-display font-light text-3xl md:text-4xl text-stone-dark leading-none">Our</h2>
+              <h2 className="font-display font-light text-3xl md:text-4xl text-stone-dark leading-none">{t("about.valuesTitleA")}</h2>
               <span className="font-body text-sm text-stone/50 tracking-widest">×</span>
-              <h2 className="font-display font-light text-3xl md:text-4xl text-bronze leading-none italic">Values</h2>
+              <h2 className="font-display font-light text-3xl md:text-4xl text-bronze leading-none italic">{t("about.valuesTitleB")}</h2>
             </motion.div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-              {values.map((v, i) => (
+              {d.about.values.map((v, i) => (
                 <motion.div
                   key={v}
                   className="group flex items-center gap-4 bg-card p-5 rounded-sm border border-stone-border hover:border-copper/30 transition-all duration-300"
@@ -223,10 +212,10 @@ export default function AboutPage() {
               transition={{ delay: 0.6 }}
             >
               <h3 className="font-display font-light text-2xl md:text-3xl text-stone-dark mb-3">
-                Cook with <span className="italic text-bronze">stone &amp; fire</span>
+                {t("about.ctaTitle")} <span className="italic text-bronze">{t("about.ctaTitleEm")}</span>
               </h3>
               <p className="font-body text-sm text-stone mb-7 max-w-sm mx-auto leading-relaxed">
-                Have a question about our cookware? Talk to us directly — every order starts with a conversation.
+                {t("about.ctaBody")}
               </p>
               <a
                 href={getWhatsAppLink()}
@@ -236,7 +225,7 @@ export default function AboutPage() {
                 className="inline-flex items-center gap-3 font-body text-xs tracking-widest uppercase px-10 py-4 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
                 style={{ letterSpacing: "0.18em" }}
               >
-                Start a Conversation
+                {t("about.ctaButton")}
               </a>
             </motion.div>
           </div>

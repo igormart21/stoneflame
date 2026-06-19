@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/context/CartContext";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 import CartDrawer from "@/components/CartDrawer";
 
 const cormorant = Cormorant_Garamond({
@@ -116,10 +117,12 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <CartProvider>
-          {children}
-          <CartDrawer />
-        </CartProvider>
+        <LanguageProvider>
+          <CartProvider>
+            {children}
+            <CartDrawer />
+          </CartProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

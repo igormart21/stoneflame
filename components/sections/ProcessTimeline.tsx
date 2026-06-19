@@ -4,50 +4,15 @@ import { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useT, useDict } from "@/lib/i18n/LanguageContext";
 
-const steps = [
-  {
-    num: "01",
-    icon: "◈",
-    title: "Stone Selection",
-    desc: "We travel to volcanic formations to hand-select rock of the right density, mineral composition, and character. Only 1 in 10 stones qualifies.",
-    detail: "Volcanic origin · Manual inspection · Mineral testing",
-  },
-  {
-    num: "02",
-    icon: "⬡",
-    title: "Rough Carving",
-    desc: "The outer form is defined using traditional tools. This first stage takes 8–12 hours and removes up to 60% of the raw stone.",
-    detail: "Hand tools only · 8-12 hours · Form definition",
-  },
-  {
-    num: "03",
-    icon: "◎",
-    title: "Interior Shaping",
-    desc: "The interior cavity is carved with precision — walls must be even within millimeters to ensure uniform heat transfer.",
-    detail: "Precision carving · Thermal calibration · Balance check",
-  },
-  {
-    num: "04",
-    icon: "✦",
-    title: "Hand Finishing",
-    desc: "Surface refinement using progressively finer stone tools. Each texture mark is intentional — the finish is part of the performance.",
-    detail: "Fine detailing · Surface treatment · Artisan signature",
-  },
-  {
-    num: "05",
-    icon: "◉",
-    title: "Fire Curing",
-    desc: "The piece is seasoned in controlled fire — multiple sessions at increasing temperature. This seals the stone and prepares it for a lifetime of cooking.",
-    detail: "Multi-stage · 900°C peak · Seasoning ritual",
-  },
-  {
-    num: "06",
-    icon: "★",
-    title: "Quality & Delivery",
-    desc: "Final inspection, certificate of authenticity signed by the artisan, and hand-packed for delivery. Yours, and only yours.",
-    detail: "QA inspection · Signed certificate · Hand-packed",
-  },
+const stepMeta = [
+  { num: "01", icon: "◈" },
+  { num: "02", icon: "⬡" },
+  { num: "03", icon: "◎" },
+  { num: "04", icon: "✦" },
+  { num: "05", icon: "◉" },
+  { num: "06", icon: "★" },
 ];
 
 export default function ProcessTimeline() {
@@ -55,6 +20,9 @@ export default function ProcessTimeline() {
   const trackRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const headerInView = useInView(headerRef, { once: true });
+  const t = useT();
+  const d = useDict();
+  const steps = stepMeta.map((m, i) => ({ ...m, ...d.process.steps[i] }));
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -116,7 +84,7 @@ export default function ProcessTimeline() {
         >
           <div className="h-px w-12 bg-copper" />
           <span className="font-body text-xs tracking-widest uppercase text-copper" style={{ letterSpacing: "0.22em" }}>
-            How It&apos;s Made
+            {t("process.eyebrow")}
           </span>
         </motion.div>
 
@@ -127,8 +95,8 @@ export default function ProcessTimeline() {
           animate={headerInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.1 }}
         >
-          The art of<br />
-          making <span className="italic" style={{ color: "#C67C3B" }}>one.</span>
+          {t("process.titleA")}<br />
+          {t("process.titleB")} <span className="italic" style={{ color: "#C67C3B" }}>{t("process.titleEm")}</span>
         </motion.h2>
 
         <motion.p
@@ -138,7 +106,7 @@ export default function ProcessTimeline() {
           animate={headerInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.3 }}
         >
-          Scroll to follow the journey from raw volcanic rock to a finished vessel that&apos;ll outlast generations.
+          {t("process.body")}
         </motion.p>
       </div>
 
@@ -215,7 +183,7 @@ export default function ProcessTimeline() {
         <div className="flex items-center gap-4">
           <div className="h-px flex-1" style={{ background: "linear-gradient(90deg, rgba(163,109,58,0.35), transparent)" }} />
           <span className="font-body text-xs tracking-widest uppercase" style={{ color: "rgba(245,242,237,0.35)", letterSpacing: "0.2em", fontSize: "0.68rem" }}>
-            End to end · One artisan · Your piece
+            {t("process.footer")}
           </span>
           <div className="h-px flex-1" style={{ background: "linear-gradient(270deg, rgba(163,109,58,0.35), transparent)" }} />
         </div>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useRef } from "react";
 import { useInView } from "framer-motion";
+import { useT, useLanguage } from "@/lib/i18n/LanguageContext";
 
 const categories = [
   {
@@ -98,6 +99,8 @@ interface ProductCategoriesProps {
 export default function ProductCategories({ activeCategory, setActiveCategory }: ProductCategoriesProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(containerRef, { once: true, margin: "-5% 0px" });
+  const t = useT();
+  const { lang } = useLanguage();
 
   return (
     <section 
@@ -114,7 +117,7 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.5 }}
           >
-            Stoneflame Collections
+            {t("categories.eyebrow")}
           </motion.p>
           <motion.h2
             className="font-display font-light text-3xl md:text-4xl text-stone-dark"
@@ -122,7 +125,7 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1 }}
           >
-            Shop by Category
+            {t("categories.title")}
           </motion.h2>
           <div className="mt-4 h-px w-24 mx-auto md:mx-0" style={{ background: "linear-gradient(90deg,#C67C3B,#EDE7DC)" }} />
         </div>
@@ -166,17 +169,17 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
                   {cat.icon}
                 </div>
 
-                {/* Names */}
+                {/* Names — primary in active language, secondary in the other */}
                 <div className="text-center">
                   <span className={`block font-display text-base md:text-lg transition-colors duration-300 ${
                     isActive ? "text-ember-mid" : "text-stone-dark group-hover:text-ember-mid"
                   }`}>
-                    {cat.enName}
+                    {lang === "pt" ? cat.ptName : cat.enName}
                   </span>
                   <span className={`block font-body text-[10px] font-medium uppercase tracking-widest mt-1 transition-colors ${
                     isActive ? "text-ember-mid" : "text-copper group-hover:text-ember-mid"
                   }`}>
-                    {cat.ptName}
+                    {lang === "pt" ? cat.enName : cat.ptName}
                   </span>
                 </div>
               </motion.button>

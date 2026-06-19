@@ -3,37 +3,14 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { getWhatsAppLink } from "@/lib/utils";
+import { useT, useDict } from "@/lib/i18n/LanguageContext";
 
-const testimonials = [
-  {
-    quote: "I've cooked on cast iron my whole life. After one dinner in the StoneFlame Grand Pot over oak wood, I couldn't go back. The flavor difference is not subtle.",
-    name: "Marcus W.",
-    role: "Chef & BBQ Competitor",
-    location: "Austin, TX",
-    rating: 5,
-  },
-  {
-    quote: "It arrived wrapped in cloth with a handwritten note from the artisan. Before I even cooked in it I understood — this was something different.",
-    name: "Elena P.",
-    role: "Food Stylist & Writer",
-    location: "New York, NY",
-    rating: 5,
-  },
-  {
-    quote: "We use ours over campfire every weekend. Heat retention means we cook less and gather more. It's become the ritual around which our family connects.",
-    name: "Daniel R.",
-    role: "Outdoor Enthusiast",
-    location: "Colorado",
-    rating: 5,
-  },
-  {
-    quote: "I gifted the Dutch Oven to my father — a man who has everything. He called it the best gift of his life. That says everything.",
-    name: "Sophia C.",
-    role: "Interior Designer",
-    location: "Miami, FL",
-    rating: 5,
-  },
-];
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  location: string;
+}
 
 function Stars({ n }: { n: number }) {
   return (
@@ -48,7 +25,7 @@ function Stars({ n }: { n: number }) {
   );
 }
 
-function TestiCard({ t, i }: { t: typeof testimonials[0]; i: number }) {
+function TestiCard({ t, i }: { t: Testimonial; i: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });
 
@@ -70,7 +47,7 @@ function TestiCard({ t, i }: { t: typeof testimonials[0]; i: number }) {
         &ldquo;
       </div>
 
-      <Stars n={t.rating}/>
+      <Stars n={5}/>
 
       <blockquote className="font-display text-xl md:text-2xl text-stone-dark leading-relaxed mt-5 mb-6 font-light italic relative z-10">
         &ldquo;{t.quote}&rdquo;
@@ -95,6 +72,8 @@ function TestiCard({ t, i }: { t: typeof testimonials[0]; i: number }) {
 export default function SocialProof() {
   const headerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headerRef, { once: true });
+  const t = useT();
+  const d = useDict();
 
   return (
     <section className="bg-bg section-padding" id="reviews">
@@ -105,7 +84,7 @@ export default function SocialProof() {
           <motion.p className="font-body text-xs text-stone/60 mb-2"
             initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ duration:0.5 }}
             style={{ letterSpacing:"0.05em" }}>
-            Told by those who cook
+            {t("social.eyebrow")}
           </motion.p>
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <motion.div
@@ -113,16 +92,16 @@ export default function SocialProof() {
               transition={{ duration:0.7, ease:[0.25,0.46,0.45,0.94], delay:0.1 }}
             >
               <div className="flex items-baseline gap-3">
-                <h2 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">Best</h2>
+                <h2 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">{t("social.titleA")}</h2>
                 <span className="font-body text-sm text-stone/50 tracking-widest">×</span>
-                <h2 className="font-display font-light text-4xl md:text-5xl text-bronze italic leading-none">Reviews</h2>
+                <h2 className="font-display font-light text-4xl md:text-5xl text-bronze italic leading-none">{t("social.titleB")}</h2>
               </div>
             </motion.div>
             <motion.a href="https://instagram.com/stoneflame" target="_blank" rel="noopener noreferrer"
               data-cursor="hover"
               className="flex items-center gap-2 font-body text-sm text-stone hover:text-bronze transition-colors duration-250"
               initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ delay:0.3 }}>
-              @stoneflame
+              {t("social.handle")}
               <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
                 <path d="M3 8H13M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -133,8 +112,8 @@ export default function SocialProof() {
 
         {/* Testimonial grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
-          {testimonials.map((t, i) => (
-            <TestiCard key={i} t={t} i={i}/>
+          {d.social.testimonials.map((item, i) => (
+            <TestiCard key={i} t={item} i={i}/>
           ))}
         </div>
 
@@ -144,10 +123,10 @@ export default function SocialProof() {
           initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ delay:0.9 }}
         >
           <h3 className="font-display font-light text-3xl md:text-4xl text-stone-dark mb-3">
-            Ready to cook with <span className="italic text-bronze">fire?</span>
+            {t("social.ctaTitleA")} <span className="italic text-bronze">{t("social.ctaTitleEm")}</span>
           </h3>
           <p className="font-body text-sm text-stone mb-7 max-w-sm mx-auto leading-relaxed">
-            Every order starts with a conversation. Tell us how you cook — we&apos;ll help you choose the right piece.
+            {t("social.ctaBody")}
           </p>
           <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer" data-cursor="hover"
             className="inline-flex items-center gap-3 font-body text-xs tracking-widest uppercase px-10 py-4 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
@@ -156,7 +135,7 @@ export default function SocialProof() {
               <path d="M14.59 11.98c-.24-.12-1.44-.71-1.66-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.77.95-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.95-1.21-.72-.64-1.21-1.44-1.35-1.68-.14-.24-.01-.37.11-.49.11-.11.24-.28.37-.42.12-.14.16-.24.24-.41.08-.16.04-.3-.02-.42-.06-.12-.54-1.32-.75-1.8-.2-.47-.4-.41-.54-.42-.14-.01-.3-.01-.46-.01-.16 0-.43.06-.65.3-.22.24-.85.83-.85 2.03s.87 2.35.99 2.51c.12.16 1.71 2.62 4.15 3.67.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.15.2-.57.2-1.05.14-1.15-.06-.1-.22-.16-.46-.28z"/>
               <path fillRule="evenodd" clipRule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 1.77.46 3.43 1.27 4.87L0 20l5.32-1.39A9.945 9.945 0 0010 20c5.523 0 10-4.477 10-10S15.523 0 10 0zm0 18.18a8.18 8.18 0 01-4.18-1.14l-.3-.18-3.1.81.83-3.01-.2-.31A8.18 8.18 0 1110 18.18z"/>
             </svg>
-            Start a Conversation
+            {t("social.ctaButton")}
           </a>
         </motion.div>
       </div>

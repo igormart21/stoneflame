@@ -6,21 +6,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { getWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
+import { useT } from "@/lib/i18n/LanguageContext";
 import { ShoppingCart, Search } from "lucide-react";
 import SearchModal from "@/components/SearchModal";
-
-const links = [
-  { label: "Collection", href: "/#collection" },
-  { label: "Our Story", href: "/#story" },
-  { label: "Craft", href: "/#process" },
-  { label: "Contact", href: "/#contact" },
-];
+import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { cartCount, setIsOpen } = useCart();
+  const t = useT();
+
+  const links = [
+    { label: t("nav.collection"), href: "/#collection" },
+    { label: t("nav.story"), href: "/#story" },
+    { label: t("nav.craft"), href: "/#process" },
+    { label: t("nav.contact"), href: "/#contact" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -85,11 +88,12 @@ export default function Navigation() {
 
           {/* Search + Cart Button (Desktop) */}
           <div className="hidden md:flex items-center gap-1">
+            <LanguageSelector />
             <button
               onClick={() => setSearchOpen(true)}
               data-cursor="hover"
               className="p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center hover:scale-105 active:scale-95 transform"
-              aria-label="Search products"
+              aria-label={t("nav.search")}
             >
               <Search className="w-5 h-5" />
             </button>
@@ -97,7 +101,7 @@ export default function Navigation() {
               onClick={() => setIsOpen(true)}
               data-cursor="hover"
               className="relative p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center hover:scale-105 active:scale-95 transform"
-              aria-label="Open Cart"
+              aria-label={t("nav.cart")}
             >
               <ShoppingCart className="w-5.5 h-5.5 text-stone hover:text-copper transition-colors" />
               {cartCount > 0 && (
@@ -110,11 +114,12 @@ export default function Navigation() {
 
           {/* Search, Cart & Hamburger (Mobile) */}
           <div className="flex items-center gap-1 md:hidden">
+            <LanguageSelector variant="mobile" />
             <button
               onClick={() => setSearchOpen(true)}
               data-cursor="hover"
               className="p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center"
-              aria-label="Search products"
+              aria-label={t("nav.search")}
             >
               <Search className="w-5 h-5" />
             </button>
@@ -122,7 +127,7 @@ export default function Navigation() {
               onClick={() => setIsOpen(true)}
               data-cursor="hover"
               className="relative p-2.5 text-stone hover:text-copper transition-colors duration-250 flex items-center justify-center"
-              aria-label="Open Cart"
+              aria-label={t("nav.cart")}
             >
               <ShoppingCart className="w-5 h-5" />
               {cartCount > 0 && (
@@ -136,7 +141,7 @@ export default function Navigation() {
               onClick={() => setOpen(!open)}
               data-cursor="hover"
               className="p-2 flex flex-col gap-1.5"
-              aria-label="Menu"
+              aria-label={t("nav.menu")}
             >
               <span className={`block w-5 h-px bg-stone-dark transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`} />
               <span className={`block w-3.5 h-px bg-stone-dark transition-all duration-300 ${open ? "opacity-0" : ""}`} />
@@ -199,7 +204,7 @@ export default function Navigation() {
                 onClick={() => setOpen(false)}
                 className="mt-4 font-body text-sm tracking-widest uppercase px-8 py-3 bg-vulcanic text-offwhite"
               >
-                Order Now
+                {t("nav.orderNow")}
               </a>
             </nav>
           </motion.div>

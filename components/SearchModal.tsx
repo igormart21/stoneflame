@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
-import { products } from "@/lib/data/products";
+import { useLocalizedProducts, localizePrice } from "@/lib/data/useProducts";
+import { useT } from "@/lib/i18n/LanguageContext";
 
 interface SearchModalProps {
   open: boolean;
@@ -22,6 +23,8 @@ const normalize = (s: string) =>
 export default function SearchModal({ open, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const t = useT();
+  const products = useLocalizedProducts();
 
   // Focus input & lock scroll when opening; reset query when closing
   useEffect(() => {
@@ -73,7 +76,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
       .sort((a, b) => b.score - a.score)
       .slice(0, 8)
       .map((r) => r.product);
-  }, [query]);
+  }, [query, products]);
 
   return (
     <AnimatePresence>
@@ -107,12 +110,12 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search products… (e.g. pressure cooker, fondue, 5L)"
+                placeholder={t("search.placeholder")}
                 className="flex-1 bg-transparent outline-none font-body text-base text-stone-dark placeholder:text-stone/50"
               />
               <button
                 onClick={onClose}
-                aria-label="Close search"
+                aria-label={t("search.close")}
                 className="p-1 text-stone hover:text-stone-dark transition-colors flex-shrink-0"
               >
                 <X className="w-5 h-5" />
@@ -123,11 +126,11 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
             <div className="max-h-[60vh] overflow-y-auto">
               {query.trim() === "" ? (
                 <p className="px-5 py-8 text-center font-body text-sm text-stone/60">
-                  Start typing to find handcrafted stone pieces.
+                  {t("search.empty")}
                 </p>
               ) : results.length === 0 ? (
                 <p className="px-5 py-8 text-center font-body text-sm text-stone/60">
-                  No products found for &ldquo;{query}&rdquo;.
+                  {t("search.noResults")} &ldquo;{query}&rdquo;.
                 </p>
               ) : (
                 <ul className="divide-y divide-stone-border/30">
@@ -161,7 +164,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
                           </p>
                         </div>
                         <span className="font-body text-sm text-copper font-medium flex-shrink-0">
-                          {p.price}
+                          {localizePrice(p.price, t("common.from"))}
                         </span>
                       </Link>
                     </li>

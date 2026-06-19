@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useT } from "@/lib/i18n/LanguageContext";
 
 export default function LoadingScreen() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const t = useT();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -59,7 +61,7 @@ export default function LoadingScreen() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              Handcrafted Stone Cookware
+              {t("loading.tagline")}
             </motion.p>
           </motion.div>
 

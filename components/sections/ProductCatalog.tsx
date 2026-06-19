@@ -7,6 +7,8 @@ import Image from "next/image";
 import { getProductWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
 import { products } from "@/lib/data/products";
+import { useLocalizedProducts, localizePrice } from "@/lib/data/useProducts";
+import { useT } from "@/lib/i18n/LanguageContext";
 import Link from "next/link";
 
 function Stars({ count, total = 5 }: { count: number; total?: number }) {
@@ -80,6 +82,7 @@ function ProductCard({ p, index }: ProductCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
   const { addToCart } = useCart();
+  const t = useT();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -158,7 +161,7 @@ function ProductCard({ p, index }: ProductCardProps) {
           className="absolute bottom-3 left-3 right-3 py-2.5 text-center font-body text-xs tracking-widest uppercase bg-vulcanic text-offwhite border-none cursor-pointer z-10 transition-all duration-250 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
           style={{ letterSpacing: "0.15em", fontSize: "0.68rem" }}
         >
-          Add to Cart
+          {t("catalog.addToCart")}
         </button>
       </Link>
 
@@ -188,7 +191,7 @@ function ProductCard({ p, index }: ProductCardProps) {
             background: "linear-gradient(135deg,#A36D3A,#C67C3B)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            {p.price}
+            {localizePrice(p.price, t("common.from"))}
           </span>
           <Link
             href={`/product/${p.slug}`}
@@ -196,7 +199,7 @@ function ProductCard({ p, index }: ProductCardProps) {
             className="font-body text-xs tracking-wider uppercase px-4 py-2 border border-bronze text-bronze hover:bg-bronze hover:text-white transition-all duration-250 text-center"
             style={{ fontSize: "0.68rem", letterSpacing: "0.12em" }}
           >
-            Details
+            {t("catalog.details")}
           </Link>
         </div>
       </div>
@@ -214,15 +217,17 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
   const inView = useInView(headerRef, { once: true });
   const pathname = usePathname();
   const isProductsPage = pathname === "/products";
+  const t = useT();
+  const localizedProducts = useLocalizedProducts();
 
   // Filter products based on category
   const filteredProducts = activeCategory
-    ? products.filter((p) => p.category === activeCategory)
-    : products;
+    ? localizedProducts.filter((p) => p.category === activeCategory)
+    : localizedProducts;
 
   // Track original index for each product to map the correct SVG silhouette
   const filteredWithIndex = filteredProducts.map((p) => {
-    const originalIndex = products.findIndex((op) => op.slug === p.slug);
+    const originalIndex = localizedProducts.findIndex((op) => op.slug === p.slug);
     return { product: p, originalIndex };
   });
 
@@ -236,7 +241,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
             style={{ letterSpacing: "0.05em" }}
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.5 }}
           >
-            STONEFLAME Artisanal
+            {t("catalog.eyebrow")}
           </motion.p>
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
@@ -246,11 +251,11 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
             >
               <div className="flex items-baseline gap-3">
                 <h2 className="font-display font-light text-4xl md:text-5xl text-stone-dark leading-none">
-                  Bestselling
+                  {t("catalog.titleA")}
                 </h2>
                 <span className="font-body text-sm text-stone/50 tracking-widest">×</span>
                 <h2 className="font-display font-light text-4xl md:text-5xl text-bronze leading-none">
-                  Pieces
+                  {t("catalog.titleB")}
                 </h2>
               </div>
             </motion.div>
@@ -264,7 +269,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
                 className="flex items-center gap-2 font-body text-sm text-stone hover:text-bronze transition-colors duration-250"
                 initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.3 }}
               >
-                View all pieces
+                {t("catalog.viewAll")}
                 <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
                   <path d="M3 8H13M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -280,7 +285,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
                 className="flex items-center gap-2 font-body text-sm text-stone hover:text-bronze transition-colors duration-250"
                 initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.3 }}
               >
-                View all pieces
+                {t("catalog.viewAll")}
                 <svg viewBox="0 0 16 16" fill="none" className="w-4 h-4">
                   <path d="M3 8H13M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -299,16 +304,16 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
               <circle cx="12" cy="12" r="10" />
               <path d="M8 12h8" strokeLinecap="round"/>
             </svg>
-            <h3 className="font-display text-2xl text-stone-dark mb-2">No pieces found in this category</h3>
+            <h3 className="font-display text-2xl text-stone-dark mb-2">{t("catalog.emptyTitle")}</h3>
             <p className="font-body text-sm text-stone mb-6 max-w-md">
-              We are currently crafting new items for this collection. Please check our other collections or click below to view all items.
+              {t("catalog.emptyDesc")}
             </p>
             <button
               onClick={() => setActiveCategory(null)}
               data-cursor="hover"
               className="font-body text-xs font-semibold tracking-widest uppercase px-6 py-3 bg-bronze text-white hover:bg-bronze/90 transition-colors rounded-xs shadow-md"
             >
-              Show all pieces
+              {t("catalog.showAll")}
             </button>
           </div>
         ) : (
@@ -334,8 +339,8 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
                   </svg>
                 </div>
                 <div className="text-center p-2">
-                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">Clear Filter</p>
-                  <p className="font-body text-xs text-stone mt-1">Show all {products.length} products</p>
+                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">{t("catalog.clearFilter")}</p>
+                  <p className="font-body text-xs text-stone mt-1">{t("catalog.showAllProducts").replace("{count}", String(products.length))}</p>
                 </div>
               </motion.button>
             ) : !isProductsPage ? (
@@ -355,8 +360,8 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
                   </svg>
                 </div>
                 <div className="text-center p-2">
-                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">View All</p>
-                  <p className="font-body text-xs text-stone mt-1">in new tab</p>
+                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">{t("catalog.viewAllCard")}</p>
+                  <p className="font-body text-xs text-stone mt-1">{t("catalog.newTab")}</p>
                 </div>
               </motion.a>
             ) : (
@@ -376,8 +381,8 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
                   </svg>
                 </div>
                 <div className="text-center p-2">
-                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">Custom Size?</p>
-                  <p className="font-body text-xs text-stone mt-1">Order via WhatsApp</p>
+                  <p className="font-display text-lg text-stone-dark group-hover:text-bronze transition-colors">{t("catalog.customSize")}</p>
+                  <p className="font-body text-xs text-stone mt-1">{t("catalog.orderViaWhatsapp")}</p>
                 </div>
               </motion.a>
             )}
@@ -390,7 +395,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
           style={{ letterSpacing: "0.06em" }}
           initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.7 }}
         >
-          All pieces come with a signed certificate of authenticity · Orders via WhatsApp only
+          {t("catalog.note")}
         </motion.p>
       </div>
     </section>
