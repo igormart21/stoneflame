@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { getWhatsAppLink } from "@/lib/utils";
 
 export default function Footer() {
@@ -6,7 +7,7 @@ export default function Footer() {
   return (
     <footer style={{ background: "#1A1208", borderTop: "1px solid rgba(43,33,24,0.8)" }}>
       <div className="container-xl py-14 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-12">
 
           {/* Brand */}
           <div>
@@ -44,6 +45,20 @@ export default function Footer() {
                 ["Reviews", "#reviews"],
               ].map(([l, h]) => (
                 <a key={h} href={h} className="font-body text-sm text-offwhite/40 hover:text-offwhite/80 transition-colors" style={{ fontSize: "0.82rem" }}>{l}</a>
+              ))}
+            </nav>
+          </div>
+
+          {/* Company */}
+          <div>
+            <h4 className="font-body text-xs uppercase tracking-widest text-bronze mb-5" style={{ letterSpacing: "0.2em" }}>Company</h4>
+            <nav className="flex flex-col gap-3">
+              {[
+                ["About Us", "/about"],
+                ["Mission & Vision", "/about#mission"],
+                ["Our Values", "/about#values"],
+              ].map(([l, h]) => (
+                <Link key={h} href={h} className="font-body text-sm text-offwhite/40 hover:text-offwhite/80 transition-colors" style={{ fontSize: "0.82rem" }}>{l}</Link>
               ))}
             </nav>
           </div>
