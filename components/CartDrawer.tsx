@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "@/lib/context/CartContext";
-import { useT } from "@/lib/i18n/LanguageContext";
+import { useT, useLanguage, formatCurrency } from "@/lib/i18n/LanguageContext";
 import { getCartWhatsAppLink } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
@@ -66,9 +66,10 @@ export default function CartDrawer() {
     cartCount,
   } = useCart();
   const t = useT();
+  const { lang } = useLanguage();
 
   const handleCheckout = () => {
-    const link = getCartWhatsAppLink(cart, cartTotal);
+    const link = getCartWhatsAppLink(cart, cartTotal, lang);
     window.open(link, "_blank");
   };
 
@@ -222,11 +223,11 @@ export default function CartDrawer() {
                               backgroundClip: "text",
                             }}
                           >
-                            ${item.priceVal * item.quantity}
+                            {formatCurrency(item.priceVal * item.quantity, lang)}
                           </span>
                           {item.quantity > 1 && (
                             <p className="font-body text-[9px] text-stone-light mt-0.5">
-                              (${item.priceVal} {t("cart.each")})
+                              ({formatCurrency(item.priceVal, lang)} {t("cart.each")})
                             </p>
                           )}
                         </div>
@@ -243,7 +244,7 @@ export default function CartDrawer() {
                 <div className="space-y-2">
                   <div className="flex justify-between font-body text-xs text-stone-light">
                     <span>{t("cart.subtotal")}</span>
-                    <span>${cartTotal}</span>
+                    <span>{formatCurrency(cartTotal, lang)}</span>
                   </div>
                   <div className="flex justify-between font-body text-xs text-stone-light">
                     <span>{t("cart.shipping")}</span>
@@ -264,7 +265,7 @@ export default function CartDrawer() {
                         backgroundClip: "text",
                       }}
                     >
-                      ${cartTotal}
+                      {formatCurrency(cartTotal, lang)}
                     </span>
                   </div>
                 </div>

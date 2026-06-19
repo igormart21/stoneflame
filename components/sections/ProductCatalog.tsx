@@ -7,8 +7,8 @@ import Image from "next/image";
 import { getProductWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
 import { products } from "@/lib/data/products";
-import { useLocalizedProducts, localizePrice } from "@/lib/data/useProducts";
-import { useT } from "@/lib/i18n/LanguageContext";
+import { useLocalizedProducts } from "@/lib/data/useProducts";
+import { useT, useLanguage, formatCurrency, getFormattedPrice } from "@/lib/i18n/LanguageContext";
 import Link from "next/link";
 
 function Stars({ count, total = 5 }: { count: number; total?: number }) {
@@ -83,6 +83,7 @@ function ProductCard({ p, index }: ProductCardProps) {
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
   const { addToCart } = useCart();
   const t = useT();
+  const { lang } = useLanguage();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -191,7 +192,7 @@ function ProductCard({ p, index }: ProductCardProps) {
             background: "linear-gradient(135deg,#A36D3A,#C67C3B)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            {localizePrice(p.price, t("common.from"))}
+            {getFormattedPrice(p, lang, t("common.from"))}
           </span>
           <Link
             href={`/product/${p.slug}`}
@@ -366,7 +367,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
               </motion.a>
             ) : (
               <motion.a
-                href={getProductWhatsAppLink("custom design request")}
+                href={getProductWhatsAppLink(lang === "pt" ? "pedido de design personalizado" : "custom design request", lang)}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="hover"

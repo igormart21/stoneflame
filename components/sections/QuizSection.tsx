@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { getWhatsAppLink } from "@/lib/utils";
-import { useT, useDict } from "@/lib/i18n/LanguageContext";
+import { useT, useDict, useLanguage, formatCurrency } from "@/lib/i18n/LanguageContext";
 
 type Step = 0 | 1 | 2;
 
@@ -37,6 +37,7 @@ export default function QuizSection() {
   const [ans2, setAns2] = useState("");
   const t = useT();
   const d = useDict();
+  const { lang } = useLanguage();
 
   const q1 = { question: d.quiz.q1.question, options: d.quiz.q1.options.map((o, i) => ({ ...o, value: q1Values[i] })) };
   const q2 = { question: d.quiz.q2.question, options: d.quiz.q2.options.map((o, i) => ({ ...o, value: q2Values[i] })) };
@@ -45,7 +46,7 @@ export default function QuizSection() {
   const rec = recRaw
     ? {
         name: recRaw.name,
-        price: `${t("common.from")} $${recRaw.priceVal}`,
+        price: `${t("common.from")} ${formatCurrency(recRaw.priceVal, lang)}`,
         desc: (d.quiz.descs as Record<string, string>)[recRaw.descKey],
       }
     : null;
@@ -53,7 +54,9 @@ export default function QuizSection() {
   const reset = () => { setStep(0); setAns1(""); setAns2(""); };
 
   const waMsg = rec
-    ? `Hello! I took the StoneFlame quiz and my recommendation is the *${rec.name}*. I'd love to order one!`
+    ? (lang === "pt"
+        ? `Olá! Fiz o teste da StoneFlame e minha recomendação é a *${rec.name}*. Gostaria de encomendar uma!`
+        : `Hello! I took the StoneFlame quiz and my recommendation is the *${rec.name}*. I'd love to order one!`)
     : undefined;
 
   return (
@@ -159,7 +162,7 @@ export default function QuizSection() {
                   <p className="font-body text-sm text-stone mb-6">{rec.desc}</p>
 
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href={getWhatsAppLink(waMsg)} target="_blank" rel="noopener noreferrer"
+                    <a href={getWhatsAppLink(waMsg, lang)} target="_blank" rel="noopener noreferrer"
                       data-cursor="hover"
                       className="font-body text-xs tracking-widest uppercase px-8 py-4 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
                       style={{letterSpacing:"0.16em"}}>
