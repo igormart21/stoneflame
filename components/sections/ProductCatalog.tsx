@@ -219,6 +219,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
   const pathname = usePathname();
   const isProductsPage = pathname === "/products";
   const t = useT();
+  const { lang } = useLanguage();
   const localizedProducts = useLocalizedProducts();
 
   // Filter products based on category
