@@ -10,15 +10,28 @@ import { PRODUCTS_TAG } from "@/lib/shopify/products";
  */
 export const runtime = "nodejs";
 
-const SECRET = process.env.SHOPIFY_REVALIDATION_SECRET;
+// Trimmed: pasting the secret into a dashboard often carries a stray
+// space or newline, which would silently break every signature check.
+const SECRET = process.env.SHOPIFY_REVALIDATION_SECRET?.trim();
 
 /** Shopify signs each webhook with HMAC-SHA256 over the raw body. */
 function isValidSignature(rawBody: string, signature: string | null): boolean {
   if (!SECRET || !signature) return false;
   const digest = crypto.createHmac("sha256", SECRET).update(rawBody, "utf8").digest("base64");
   const a = Buffer.from(digest);
-  const b = Buffer.from(signature);
+  const b = Buffer.from(signature.trim());
   return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+/**
+ * Diagnostics only — never returns the secret itself, just whether one is
+ * configured and its length, which is enough to spot a bad paste.
+ */
+export async function GET() {
+  return NextResponse.json({
+    secretConfigured: Boolean(SECRET),
+    secretLength: SECRET?.length ?? 0,
+  });
 }
 
 export async function POST(req: NextRequest) {
