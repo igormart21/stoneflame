@@ -2,17 +2,16 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
-  // Static HTML export for shared hosting (Hostinger) — outputs to ./out
-  output: "export",
-  trailingSlash: true,
+  // Server rendering + ISR on Vercel, so Shopify changes (stock, price, images)
+  // show up on the site without a rebuild.
   turbopack: {
     root: path.resolve(__dirname),
   },
   images: {
-    // No image optimization server in a static export; serve images as-is
-    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      // Product images are served from Shopify's CDN
+      { protocol: "https", hostname: "cdn.shopify.com" },
     ],
   },
 };

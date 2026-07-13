@@ -1,112 +1,47 @@
 "use client";
 
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { useLocalizedProduct } from "@/lib/data/useProducts";
+import { WhatsAppButton } from "@/components/ClientOnlyComponents";
 import { useCart } from "@/lib/context/CartContext";
-import { useT, useLanguage, formatCurrency } from "@/lib/i18n/LanguageContext";
-import { ChevronLeft, Plus, Minus, Shield, Sparkles, Heart, Star, Truck, Award, ShoppingBag } from "lucide-react";
+import { useT } from "@/lib/i18n/LanguageContext";
+import { getProductWhatsAppLink } from "@/lib/utils";
+import type { SiteProduct } from "@/lib/shopify/types";
+import { ChevronLeft, Plus, Minus, Shield, Sparkles, Star, Truck, Award, ShoppingBag, Loader2, MessageCircle } from "lucide-react";
 
-const silhouettes = [
-  // 0 – Grand Pot
-  <svg key={0} viewBox="0 0 180 160" fill="none" className="w-full h-full">
-    <ellipse cx="90" cy="148" rx="62" ry="9" fill="rgba(163,109,58,0.12)"/>
-    <path d="M35 88V120C35 136 58 148 90 148C122 148 145 136 145 120V88C145 72 122 60 90 60C58 60 35 72 35 88Z" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="90" cy="88" rx="55" ry="20" fill="#1a0c04" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="90" cy="86" rx="46" ry="16" fill="rgba(43,33,24,0.7)"/>
-    <path d="M65 60V47C65 45 75 44 90 44C105 44 115 45 115 47V60" stroke="#A36D3A" strokeWidth="1.5" strokeLinecap="round"/>
-    <ellipse cx="90" cy="47" rx="16" ry="4" fill="#2B2118" stroke="#A36D3A" strokeWidth="1"/>
-    <circle cx="90" cy="44" r="3.5" fill="#2B2118" stroke="#C67C3B" strokeWidth="1"/>
-  </svg>,
-  // 1 – Dutch Oven
-  <svg key={1} viewBox="0 0 180 160" fill="none" className="w-full h-full">
-    <ellipse cx="90" cy="150" rx="58" ry="8" fill="rgba(163,109,58,0.12)"/>
-    <path d="M38 92V118C38 132 60 142 90 142C120 142 142 132 142 118V92C142 78 120 68 90 68C60 68 38 78 38 92Z" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="90" cy="92" rx="52" ry="18" fill="#1a0c04" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="90" cy="90" rx="43" ry="14" fill="rgba(43,33,24,0.6)"/>
-    <circle cx="90" cy="74" r="7" fill="#2B2118" stroke="#C67C3B" strokeWidth="1.2"/>
-  </svg>,
-  // 2 – Skillet
-  <svg key={2} viewBox="0 0 210 130" fill="none" className="w-full h-full">
-    <ellipse cx="95" cy="118" rx="65" ry="9" fill="rgba(163,109,58,0.12)"/>
-    <ellipse cx="95" cy="88" rx="65" ry="25" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="95" cy="86" rx="55" ry="20" fill="#1a0c04" stroke="#A36D3A" strokeWidth="0.8"/>
-    <path d="M160 88H196C198 88 198 92 196 92H160" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2" strokeLinecap="round"/>
-  </svg>,
-  // 3 – Wok
-  <svg key={3} viewBox="0 0 180 160" fill="none" className="w-full h-full">
-    <ellipse cx="90" cy="150" rx="68" ry="9" fill="rgba(163,109,58,0.12)"/>
-    <path d="M22 98C22 68 52 42 90 42C128 42 158 68 158 98C158 118 135 135 90 135C45 135 22 118 22 98Z" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="90" cy="98" rx="40" ry="14" fill="rgba(198,124,59,0.06)"/>
-  </svg>,
-  // 4 – Mini Cocotte
-  <svg key={4} viewBox="0 0 140 160" fill="none" className="w-full h-full">
-    <ellipse cx="70" cy="148" rx="40" ry="7" fill="rgba(163,109,58,0.12)"/>
-    <path d="M28 82V106C28 120 46 132 70 132C94 132 112 120 112 106V82C112 68 94 56 70 56C46 56 28 68 28 82Z" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="70" cy="82" rx="42" ry="16" fill="#1a0c04" stroke="#A36D3A" strokeWidth="1.2"/>
-    <circle cx="70" cy="66" r="6" fill="#2B2118" stroke="#C67C3B" strokeWidth="1.2"/>
-  </svg>,
-  // 5 – Grand Brasier
-  <svg key={5} viewBox="0 0 210 140" fill="none" className="w-full h-full">
-    <ellipse cx="105" cy="130" rx="80" ry="9" fill="rgba(163,109,58,0.12)"/>
-    <path d="M26 82V108C26 122 60 134 105 134C150 134 184 122 184 108V82C184 68 150 56 105 56C60 56 26 68 26 82Z" fill="#2B2118" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="105" cy="82" rx="79" ry="25" fill="#1a0c04" stroke="#A36D3A" strokeWidth="1.2"/>
-    <ellipse cx="105" cy="80" rx="66" ry="20" fill="rgba(43,33,24,0.6)"/>
-  </svg>,
-];
 
-export default function ProductDetail() {
-  const params = useParams();
+
+export default function ProductDetail({ product }: { product: SiteProduct }) {
   const router = useRouter();
-  const slug = params.slug as string;
-  const { addToCart } = useCart();
+  const { addToCart, loading } = useCart();
   const t = useT();
-  const { lang } = useLanguage();
-
-  const { product, index: productIndex } = useLocalizedProduct(slug);
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"details" | "benefits" | "warranty">("details");
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-bg flex flex-col items-center justify-center">
-        <h1 className="font-display text-3xl mb-4">{t("product.notFound")}</h1>
-        <button
-          onClick={() => router.push("/")}
-          className="font-body text-xs uppercase tracking-widest px-6 py-3 bg-vulcanic text-offwhite"
-        >
-          {t("product.backHome")}
-        </button>
-      </div>
-    );
-  }
+  const soldOut = !product.availableForSale;
+  /** Shopify caps the line at the stock it has; don't let the user exceed it. */
+  const maxQty = product.quantityAvailable ?? 99;
 
-  const handleAddToCart = () => {
-    // Add multiple quantities by loop or modify addToCart to accept quantity.
-    // In our CartContext addToCart adds 1. Let's repeat adding based on chosen quantity.
-    for (let i = 0; i < quantity; i++) {
-      addToCart({
-        slug: product.slug,
-        name: product.name,
-        priceVal: product.priceVal,
-        priceStr: product.price,
-        capacity: product.capacity,
-        index: productIndex,
-        image: product.images?.[0],
-      });
-    }
-    // Optional: reset page quantity to 1 after adding.
+  const handleAddToCart = async () => {
+    if (soldOut || !product.variantId) return;
+    await addToCart(product.variantId, quantity);
     setQuantity(1);
   };
 
-  const formattedInstallments = formatCurrency(product.priceVal / 4, lang, false, true);
-  const monthlyPlan = formatCurrency(product.priceVal / 12, lang, false, true);
+  const money = (v: number) =>
+    new Intl.NumberFormat(product.currencyCode === "BRL" ? "pt-BR" : "en-US", {
+      style: "currency",
+      currency: product.currencyCode,
+    }).format(v);
+
+  const formattedInstallments = money(product.priceVal / 4);
+  const monthlyPlan = money(product.priceVal / 12);
 
   return (
     <>
@@ -151,14 +86,9 @@ export default function ProductDetail() {
                     />
                   </div>
                 ) : (
-                  /* Floating image simulation with parallax effect for silhouettes */
-                  <motion.div 
-                    className="w-full h-full max-w-[340px] md:max-w-[420px] flex items-center justify-center p-12 md:p-16"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    {silhouettes[productIndex]}
-                  </motion.div>
+                  <div className="w-full h-full flex items-center justify-center text-stone/30 font-display text-xl">
+                    {product.name}
+                  </div>
                 )}
               </div>
 
@@ -246,11 +176,30 @@ export default function ProductDetail() {
                       backgroundClip: "text",
                     }}
                   >
-                    {formatCurrency(product.priceVal, lang)}
+                    {product.price}
                   </span>
-                  <span className="font-body text-xs text-stone-light">{lang === "pt" ? "BRL" : "USD"}</span>
+                  <span className="font-body text-xs text-stone-light">{product.currencyCode}</span>
+                  {product.compareAtPrice && (
+                    <span className="font-body text-sm text-stone-light line-through">
+                      {product.compareAtPrice}
+                    </span>
+                  )}
                 </div>
-                
+
+                {/* Live stock straight from Shopify */}
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`w-2 h-2 rounded-full ${soldOut ? "bg-red-500" : "bg-green-600"}`}
+                  />
+                  <span className="font-body text-xs text-stone">
+                    {soldOut
+                      ? t("product.soldOut")
+                      : product.quantityAvailable != null && product.quantityAvailable <= 5
+                        ? t("product.lowStock").replace("{n}", String(product.quantityAvailable))
+                        : t("product.inStock")}
+                  </span>
+                </div>
+
                 <div className="space-y-1.5 pl-1.5 border-l-2 border-copper/30">
                   <p className="font-body text-xs text-stone leading-relaxed">
                     {t("product.shippingNote")}
@@ -284,9 +233,10 @@ export default function ProductDetail() {
                     {quantity}
                   </span>
                   <button
-                    onClick={() => setQuantity((prev) => prev + 1)}
-                    className="p-3.5 text-stone hover:text-copper transition-colors"
-                    aria-label="Increase quantity"
+                    onClick={() => setQuantity((prev) => Math.min(maxQty, prev + 1))}
+                    disabled={quantity >= maxQty}
+                    className="p-3.5 text-stone hover:text-copper transition-colors disabled:opacity-30"
+                    aria-label={t("product.increase")}
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -295,12 +245,34 @@ export default function ProductDetail() {
                 {/* Add To Cart */}
                 <button
                   onClick={handleAddToCart}
+                  disabled={soldOut || loading}
                   data-cursor="hover"
-                  className="flex-1 py-4 bg-copper text-offwhite hover:bg-copper/95 transition-all duration-300 font-body text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg"
+                  className={`flex-1 py-4 transition-all duration-300 font-body text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg ${
+                    soldOut
+                      ? "bg-stone/60 text-offwhite cursor-not-allowed"
+                      : "bg-copper text-offwhite hover:bg-copper/95 disabled:opacity-60"
+                  }`}
                 >
-                  <ShoppingBag className="w-4 h-4" /> {t("product.addToCart")}
+                  {loading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <ShoppingBag className="w-4 h-4" />
+                  )}
+                  {soldOut ? t("product.soldOut") : t("product.addToCart")}
                 </button>
               </div>
+
+              {/* Support CTA — highest-intent moment: the customer is deciding */}
+              <a
+                href={getProductWhatsAppLink(product.name)}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="hover"
+                className="flex items-center justify-center gap-2.5 w-full py-3 border border-stone-border rounded-sm text-stone hover:border-[#25D366] hover:text-[#128C7E] transition-all duration-300 font-body text-xs"
+              >
+                <MessageCircle className="w-4 h-4" />
+                {t("product.supportCta")}
+              </a>
 
               {/* Details and Tabs section */}
               <div className="pt-4 space-y-4">
@@ -394,6 +366,7 @@ export default function ProductDetail() {
       </main>
 
       <Footer />
+      <WhatsAppButton />
     </>
   );
 }

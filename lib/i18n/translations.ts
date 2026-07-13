@@ -34,6 +34,7 @@ const en = {
     titleB: "Pieces",
     viewAll: "View all pieces",
     addToCart: "Add to Cart",
+    soldOut: "Sold Out",
     details: "Details",
     emptyTitle: "No pieces found in this category",
     emptyDesc:
@@ -299,8 +300,8 @@ const en = {
     shipping: "Shipping",
     shippingValue: "Calculated at Checkout",
     total: "Total Order",
-    checkout: "Checkout via WhatsApp",
-    checkoutNote: "✓ Your order will be sent as a formatted message to WhatsApp.",
+    checkout: "Checkout",
+    checkoutNote: "✓ Secure payment on Shopify. Shipping calculated at checkout.",
   },
   product: {
     notFound: "Product not found",
@@ -313,6 +314,10 @@ const en = {
     shippingNote: "✓ Shipping calculated at checkout.",
     installments:
       "✓ 4 interest-free installments of {a}, or from {b}/mo.",
+    inStock: "In stock",
+    lowStock: "Only {n} left in stock",
+    soldOut: "Sold Out",
+    supportCta: "Questions about this piece? Talk to us on WhatsApp",
     addToCart: "Add to Cart",
     decrease: "Decrease quantity",
     increase: "Increase quantity",
@@ -365,6 +370,7 @@ const pt: typeof en = {
     titleB: "Peças",
     viewAll: "Ver todas as peças",
     addToCart: "Adicionar ao Carrinho",
+    soldOut: "Esgotado",
     details: "Detalhes",
     emptyTitle: "Nenhuma peça encontrada nesta categoria",
     emptyDesc:
@@ -630,8 +636,8 @@ const pt: typeof en = {
     shipping: "Frete",
     shippingValue: "Calculado no Checkout",
     total: "Total do Pedido",
-    checkout: "Finalizar via WhatsApp",
-    checkoutNote: "✓ Seu pedido será enviado como uma mensagem formatada no WhatsApp.",
+    checkout: "Finalizar Compra",
+    checkoutNote: "✓ Pagamento seguro no Shopify. Frete calculado no checkout.",
   },
   product: {
     notFound: "Produto não encontrado",
@@ -644,6 +650,10 @@ const pt: typeof en = {
     shippingNote: "✓ Frete calculado no checkout.",
     installments:
       "✓ 4 parcelas sem juros de {a}, ou a partir de {b}/mês.",
+    inStock: "Em estoque",
+    lowStock: "Restam apenas {n} em estoque",
+    soldOut: "Esgotado",
+    supportCta: "Dúvidas sobre esta peça? Fale conosco no WhatsApp",
     addToCart: "Adicionar ao Carrinho",
     decrease: "Diminuir quantidade",
     increase: "Aumentar quantidade",

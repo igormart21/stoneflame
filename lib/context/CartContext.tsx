@@ -1,93 +1,120 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import {
+  createCart,
+  getCart,
+  addCartLines,
+  updateCartLine,
+  removeCartLine,
+} from "@/lib/shopify/cart";
+import type { Cart } from "@/lib/shopify/types";
 
-export interface CartItem {
-  slug: string;
-  name: string;
-  priceVal: number;
-  priceStr: string;
-  quantity: number;
-  capacity: string;
-  index: number;
-  image?: string;
-}
+const CART_ID_KEY = "stoneflame_shopify_cart_id";
 
 interface CartContextProps {
-  cart: CartItem[];
+  cart: Cart | null;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  addToCart: (item: Omit<CartItem, "quantity">) => void;
-  removeFromCart: (slug: string) => void;
-  updateQuantity: (slug: string, quantity: number) => void;
-  clearCart: () => void;
+  /** Adds a Shopify variant to the cart (creates the cart on first add). */
+  addToCart: (variantId: string, quantity?: number) => Promise<void>;
+  updateQuantity: (lineId: string, quantity: number) => Promise<void>;
+  removeFromCart: (lineId: string) => Promise<void>;
+  /** Sends the customer to Shopify's hosted checkout. */
+  checkout: () => void;
   cartCount: number;
   cartTotal: number;
+  currencyCode: string;
+  loading: boolean;
+  error: string | null;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Cart | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Load cart from localStorage after mount to avoid hydration mismatch
+  // Restore the Shopify cart from its saved id. Shopify carts expire (and are
+  // consumed on checkout), so a missing cart just means "start fresh".
   useEffect(() => {
-    const stored = localStorage.getItem("stoneflame_cart");
-    if (stored) {
-      try {
-        setCart(JSON.parse(stored));
-      } catch (e) {
-        console.error("Error parsing cart from localStorage:", e);
-      }
-    }
-    setIsLoaded(true);
+    const id = localStorage.getItem(CART_ID_KEY);
+    if (!id) return;
+    getCart(id)
+      .then((c) => {
+        if (c) setCart(c);
+        else localStorage.removeItem(CART_ID_KEY);
+      })
+      .catch(() => localStorage.removeItem(CART_ID_KEY));
   }, []);
 
-  // Save cart to localStorage when it changes
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("stoneflame_cart", JSON.stringify(cart));
-    }
-  }, [cart, isLoaded]);
+  const persist = useCallback((c: Cart) => {
+    setCart(c);
+    localStorage.setItem(CART_ID_KEY, c.id);
+  }, []);
 
-  const addToCart = (item: Omit<CartItem, "quantity">) => {
-    setCart((prev) => {
-      const existing = prev.find((i) => i.slug === item.slug);
-      if (existing) {
-        return prev.map((i) =>
-          i.slug === item.slug ? { ...i, quantity: i.quantity + 1 } : i
-        );
+  /** Wraps a cart mutation with loading/error handling. */
+  const run = useCallback(
+    async (fn: () => Promise<Cart>) => {
+      setLoading(true);
+      setError(null);
+      try {
+        persist(await fn());
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Erro no carrinho");
+        throw e;
+      } finally {
+        setLoading(false);
       }
-      return [...prev, { ...item, quantity: 1 }];
-    });
-    setIsOpen(true); // Automatically open the cart drawer for feedback
-  };
-
-  const removeFromCart = (slug: string) => {
-    setCart((prev) => prev.filter((item) => item.slug !== slug));
-  };
-
-  const updateQuantity = (slug: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(slug);
-      return;
-    }
-    setCart((prev) =>
-      prev.map((item) => (item.slug === slug ? { ...item, quantity } : item))
-    );
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.priceVal * item.quantity,
-    0
+    },
+    [persist]
   );
+
+  const addToCart = useCallback(
+    async (variantId: string, quantity = 1) => {
+      const lines = [{ merchandiseId: variantId, quantity }];
+      await run(async () => {
+        const existingId = cart?.id ?? localStorage.getItem(CART_ID_KEY);
+        if (existingId) {
+          try {
+            return await addCartLines(existingId, lines);
+          } catch {
+            // The stored cart expired or was completed — start a new one.
+            localStorage.removeItem(CART_ID_KEY);
+          }
+        }
+        return createCart(lines);
+      });
+      setIsOpen(true);
+    },
+    [cart, run]
+  );
+
+  const updateQuantity = useCallback(
+    async (lineId: string, quantity: number) => {
+      if (!cart) return;
+      if (quantity <= 0) {
+        await run(() => removeCartLine(cart.id, lineId));
+        return;
+      }
+      await run(() => updateCartLine(cart.id, lineId, quantity));
+    },
+    [cart, run]
+  );
+
+  const removeFromCart = useCallback(
+    async (lineId: string) => {
+      if (!cart) return;
+      await run(() => removeCartLine(cart.id, lineId));
+    },
+    [cart, run]
+  );
+
+  const checkout = useCallback(() => {
+    if (cart?.checkoutUrl) window.location.href = cart.checkoutUrl;
+  }, [cart]);
 
   return (
     <CartContext.Provider
@@ -96,11 +123,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         isOpen,
         setIsOpen,
         addToCart,
-        removeFromCart,
         updateQuantity,
-        clearCart,
-        cartCount,
-        cartTotal,
+        removeFromCart,
+        checkout,
+        cartCount: cart?.totalQuantity ?? 0,
+        cartTotal: cart?.total ?? 0,
+        currencyCode: cart?.currencyCode ?? "BRL",
+        loading,
+        error,
       }}
     >
       {children}

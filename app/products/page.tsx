@@ -1,30 +1,9 @@
-"use client";
+import { getProducts } from "@/lib/shopify/products";
+import ProductsClient from "./ProductsClient";
 
-import { useState } from "react";
-import Navigation from "@/components/Navigation";
-import ProductCategories from "@/components/sections/ProductCategories";
-import ProductCatalog from "@/components/sections/ProductCatalog";
-import Footer from "@/components/Footer";
-import { LoadingScreen } from "@/components/ClientOnlyComponents";
+export const revalidate = 60;
 
-export default function ProductsPage() {
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
-  return (
-    <>
-      <LoadingScreen />
-      <Navigation />
-      <main className="pt-20 min-h-screen bg-bg">
-        <ProductCategories 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
-        />
-        <ProductCatalog 
-          activeCategory={activeCategory} 
-          setActiveCategory={setActiveCategory} 
-        />
-      </main>
-      <Footer />
-    </>
-  );
+export default async function ProductsPage() {
+  const products = await getProducts();
+  return <ProductsClient products={products} />;
 }

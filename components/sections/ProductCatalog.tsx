@@ -6,9 +6,8 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { getProductWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
-import { products } from "@/lib/data/products";
-import { useLocalizedProducts } from "@/lib/data/useProducts";
-import { useT, useLanguage, formatCurrency, getFormattedPrice } from "@/lib/i18n/LanguageContext";
+import { useT } from "@/lib/i18n/LanguageContext";
+import type { SiteProduct } from "@/lib/shopify/types";
 import Link from "next/link";
 
 function Stars({ count, total = 5 }: { count: number; total?: number }) {
@@ -73,7 +72,7 @@ const silhouettes = [
 ];
 
 interface ProductCardProps {
-  p: typeof products[0];
+  p: SiteProduct;
   index: number;
 }
 
@@ -81,22 +80,16 @@ function ProductCard({ p, index }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
-  const { addToCart } = useCart();
+  const { addToCart, loading } = useCart();
   const t = useT();
-  const { lang } = useLanguage();
+
+  const soldOut = !p.availableForSale;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart({
-      slug: p.slug,
-      name: p.name,
-      priceVal: p.priceVal,
-      priceStr: p.price,
-      capacity: p.capacity,
-      index: index,
-      image: p.images?.[0],
-    });
+    if (soldOut || !p.variantId) return;
+    addToCart(p.variantId, 1);
   };
 
   return (
@@ -158,11 +151,16 @@ function ProductCard({ p, index }: ProductCardProps) {
         {/* Add to Cart quick-add — always visible on touch, hover-reveal on desktop */}
         <button
           onClick={handleAddToCart}
+          disabled={soldOut || loading}
           data-cursor="hover"
-          className="absolute bottom-3 left-3 right-3 py-2.5 text-center font-body text-xs tracking-widest uppercase bg-vulcanic text-offwhite border-none cursor-pointer z-10 transition-all duration-250 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0"
+          className={`absolute bottom-3 left-3 right-3 py-2.5 text-center font-body text-xs tracking-widest uppercase border-none z-10 transition-all duration-250 opacity-100 translate-y-0 md:opacity-0 md:translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0 ${
+            soldOut
+              ? "bg-stone/70 text-offwhite cursor-not-allowed md:opacity-100 md:translate-y-0"
+              : "bg-vulcanic text-offwhite cursor-pointer"
+          }`}
           style={{ letterSpacing: "0.15em", fontSize: "0.68rem" }}
         >
-          {t("catalog.addToCart")}
+          {soldOut ? t("catalog.soldOut") : t("catalog.addToCart")}
         </button>
       </Link>
 
@@ -192,7 +190,7 @@ function ProductCard({ p, index }: ProductCardProps) {
             background: "linear-gradient(135deg,#A36D3A,#C67C3B)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
           }}>
-            {getFormattedPrice(p, lang, t("common.from"))}
+            {p.price}
           </span>
           <Link
             href={`/product/${p.slug}`}
@@ -209,27 +207,26 @@ function ProductCard({ p, index }: ProductCardProps) {
 }
 
 interface ProductCatalogProps {
+  products: SiteProduct[];
   activeCategory: string | null;
   setActiveCategory: (category: string | null) => void;
 }
 
-export default function ProductCatalog({ activeCategory, setActiveCategory }: ProductCatalogProps) {
+export default function ProductCatalog({ products, activeCategory, setActiveCategory }: ProductCatalogProps) {
   const headerRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headerRef, { once: true });
   const pathname = usePathname();
   const isProductsPage = pathname === "/products";
   const t = useT();
-  const { lang } = useLanguage();
-  const localizedProducts = useLocalizedProducts();
 
   // Filter products based on category
   const filteredProducts = activeCategory
-    ? localizedProducts.filter((p) => p.category === activeCategory)
-    : localizedProducts;
+    ? products.filter((p) => p.category === activeCategory)
+    : products;
 
   // Track original index for each product to map the correct SVG silhouette
   const filteredWithIndex = filteredProducts.map((p) => {
-    const originalIndex = localizedProducts.findIndex((op) => op.slug === p.slug);
+    const originalIndex = products.findIndex((op) => op.slug === p.slug);
     return { product: p, originalIndex };
   });
 
@@ -368,7 +365,7 @@ export default function ProductCatalog({ activeCategory, setActiveCategory }: Pr
               </motion.a>
             ) : (
               <motion.a
-                href={getProductWhatsAppLink(lang === "pt" ? "pedido de design personalizado" : "custom design request", lang)}
+                href={getProductWhatsAppLink("pedido de design personalizado")}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-cursor="hover"

@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { Search, X } from "lucide-react";
-import { useLocalizedProducts, localizePrice } from "@/lib/data/useProducts";
+import { getProducts } from "@/lib/shopify/products";
+import type { SiteProduct } from "@/lib/shopify/types";
 import { useT } from "@/lib/i18n/LanguageContext";
 
 interface SearchModalProps {
@@ -22,9 +23,15 @@ const normalize = (s: string) =>
 
 export default function SearchModal({ open, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("");
+  const [products, setProducts] = useState<SiteProduct[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const t = useT();
-  const products = useLocalizedProducts();
+
+  // Load the catalog from Shopify the first time the modal is opened.
+  useEffect(() => {
+    if (!open || products.length) return;
+    getProducts().then(setProducts).catch(() => {});
+  }, [open, products.length]);
 
   // Focus input & lock scroll when opening; reset query when closing
   useEffect(() => {
@@ -164,7 +171,7 @@ export default function SearchModal({ open, onClose }: SearchModalProps) {
                           </p>
                         </div>
                         <span className="font-body text-sm text-copper font-medium flex-shrink-0">
-                          {localizePrice(p.price, t("common.from"))}
+                          {p.price}
                         </span>
                       </Link>
                     </li>
