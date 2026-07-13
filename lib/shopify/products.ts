@@ -29,15 +29,32 @@ function formatMoney(amount: number, currencyCode: string): string {
   }).format(amount);
 }
 
-/** Metafields may store lists as JSON arrays or newline-separated text. */
+/**
+ * Metafield lists arrive as a JSON array, but Shopify's CSV importer wraps a
+ * JSON string in a single-item list (`["[\"a\",\"b\"]"]`), so unwrap that case
+ * too. Falls back to newline-separated text, then to the local catalog.
+ */
 function parseList(value: string | undefined, fallback: string[]): string[] {
   if (!value) return fallback;
-  try {
-    const parsed = JSON.parse(value);
-    if (Array.isArray(parsed)) return parsed.map(String);
-  } catch {
-    // not JSON — fall through to newline splitting
-  }
+
+  const tryParse = (raw: string): string[] | null => {
+    try {
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return null;
+      // Double-encoded: a one-item list holding the real JSON array.
+      if (parsed.length === 1 && typeof parsed[0] === "string") {
+        const inner = tryParse(parsed[0]);
+        if (inner) return inner;
+      }
+      return parsed.map(String);
+    } catch {
+      return null;
+    }
+  };
+
+  const parsed = tryParse(value);
+  if (parsed?.length) return parsed;
+
   const lines = value.split("\n").map((l) => l.trim()).filter(Boolean);
   return lines.length ? lines : fallback;
 }

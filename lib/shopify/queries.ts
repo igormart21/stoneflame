@@ -57,7 +57,8 @@ export const PRODUCT_FRAGMENT = /* GraphQL */ `
     tagline: metafield(namespace: "custom", key: "tagline") {
       value
     }
-    capacity: metafield(namespace: "custom", key: "capacity") {
+    # The "Capacidade" definition was created with a Portuguese key.
+    capacity: metafield(namespace: "custom", key: "capacidade") {
       value
     }
     badge: metafield(namespace: "custom", key: "badge") {
