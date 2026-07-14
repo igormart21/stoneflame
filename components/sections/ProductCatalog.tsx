@@ -8,6 +8,7 @@ import { getProductWhatsAppLink } from "@/lib/utils";
 import { useCart } from "@/lib/context/CartContext";
 import { useT } from "@/lib/i18n/LanguageContext";
 import type { SiteProduct } from "@/lib/shopify/types";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 function Stars({ count, total = 5 }: { count: number; total?: number }) {
@@ -80,7 +81,7 @@ function ProductCard({ p, index }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-5% 0px" });
-  const { addToCart, loading } = useCart();
+  const { addToCart, buyNow, loading } = useCart();
   const t = useT();
 
   const soldOut = !p.availableForSale;
@@ -92,6 +93,13 @@ function ProductCard({ p, index }: ProductCardProps) {
     addToCart(p.variantId, 1);
   };
 
+  const handleBuyNow = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (soldOut || !p.variantId) return;
+    buyNow(p.variantId, 1);
+  };
+
   return (
     <motion.div
       ref={ref}
@@ -100,7 +108,9 @@ function ProductCard({ p, index }: ProductCardProps) {
       transition={{ duration: 0.6, delay: (index % 4) * 0.08, ease: [0.25, 0.46, 0.45, 0.94] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="bg-card rounded-sm overflow-hidden group"
+      /* h-full + flex column so the price/CTA row lands at the same height on
+         every card, however long the name or capacity text is. */
+      className="bg-card rounded-sm overflow-hidden group h-full flex flex-col"
       style={{
         boxShadow: hovered
           ? "0 8px 32px rgba(26,18,8,0.12), 0 2px 8px rgba(26,18,8,0.06)"
@@ -110,7 +120,7 @@ function ProductCard({ p, index }: ProductCardProps) {
       data-cursor="hover"
     >
       {/* Image area */}
-      <Link href={`/product/${p.slug}`} className="block relative overflow-hidden aspect-square" style={{ background: p.bg }}>
+      <Link href={`/product/${p.slug}`} className="block relative overflow-hidden aspect-square flex-shrink-0" style={{ background: p.bg }}>
         {/* Badge */}
         <div className="absolute top-3 left-3 z-10">
           <span className="font-body text-xs px-2.5 py-1 bg-white text-stone-dark font-medium"
@@ -164,8 +174,8 @@ function ProductCard({ p, index }: ProductCardProps) {
         </button>
       </Link>
 
-      {/* Info */}
-      <div className="p-4 md:p-5">
+      {/* Info — flex-1 so the price/CTA block is pinned to the bottom of the card */}
+      <div className="p-4 md:p-5 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-2">
           <Stars count={p.rating}/>
           <span className="font-body text-xs text-stone" style={{ fontSize: "0.7rem" }}>({p.reviews})</span>
@@ -185,21 +195,40 @@ function ProductCard({ p, index }: ProductCardProps) {
           {p.capacity}
         </p>
 
-        <div className="flex items-center justify-between pt-3 border-t border-stone-border">
-          <span className="font-display text-lg font-medium" style={{
-            background: "linear-gradient(135deg,#A36D3A,#C67C3B)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          }}>
-            {p.price}
-          </span>
-          <Link
-            href={`/product/${p.slug}`}
+        {/* mt-auto pushes this block to the bottom, aligning it across the grid */}
+        <div className="mt-auto pt-3 border-t border-stone-border space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="font-display text-lg font-medium" style={{
+              background: "linear-gradient(135deg,#A36D3A,#C67C3B)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            }}>
+              {p.price}
+            </span>
+            <Link
+              href={`/product/${p.slug}`}
+              data-cursor="hover"
+              className="font-body text-xs tracking-wider uppercase px-4 py-2 border border-bronze text-bronze hover:bg-bronze hover:text-white transition-all duration-250 text-center flex-shrink-0"
+              style={{ fontSize: "0.68rem", letterSpacing: "0.12em" }}
+            >
+              {t("catalog.details")}
+            </Link>
+          </div>
+
+          {/* Buy Now — straight to Shopify checkout with just this item */}
+          <button
+            onClick={handleBuyNow}
+            disabled={soldOut || loading}
             data-cursor="hover"
-            className="font-body text-xs tracking-wider uppercase px-4 py-2 border border-bronze text-bronze hover:bg-bronze hover:text-white transition-all duration-250 text-center"
-            style={{ fontSize: "0.68rem", letterSpacing: "0.12em" }}
+            className={`w-full py-2.5 font-body text-xs font-semibold tracking-widest uppercase transition-all duration-250 flex items-center justify-center gap-2 ${
+              soldOut
+                ? "bg-stone/40 text-offwhite cursor-not-allowed"
+                : "bg-copper text-offwhite hover:bg-ember-mid shadow-sm"
+            }`}
+            style={{ letterSpacing: "0.14em", fontSize: "0.68rem" }}
           >
-            {t("catalog.details")}
-          </Link>
+            {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+            {soldOut ? t("catalog.soldOut") : t("catalog.buyNow")}
+          </button>
         </div>
       </div>
     </motion.div>

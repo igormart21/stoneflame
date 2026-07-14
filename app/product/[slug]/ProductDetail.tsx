@@ -11,13 +11,13 @@ import { useCart } from "@/lib/context/CartContext";
 import { useT } from "@/lib/i18n/LanguageContext";
 import { getProductWhatsAppLink } from "@/lib/utils";
 import type { SiteProduct } from "@/lib/shopify/types";
-import { ChevronLeft, Plus, Minus, Shield, Sparkles, Star, Truck, Award, ShoppingBag, Loader2, MessageCircle } from "lucide-react";
+import { ChevronLeft, Plus, Minus, Shield, Sparkles, Star, Truck, Award, ShoppingBag, Loader2, MessageCircle, Zap } from "lucide-react";
 
 
 
 export default function ProductDetail({ product }: { product: SiteProduct }) {
   const router = useRouter();
-  const { addToCart, loading } = useCart();
+  const { addToCart, buyNow, loading } = useCart();
   const t = useT();
 
   const [quantity, setQuantity] = useState(1);
@@ -32,6 +32,11 @@ export default function ProductDetail({ product }: { product: SiteProduct }) {
     if (soldOut || !product.variantId) return;
     await addToCart(product.variantId, quantity);
     setQuantity(1);
+  };
+
+  const handleBuyNow = async () => {
+    if (soldOut || !product.variantId) return;
+    await buyNow(product.variantId, quantity);
   };
 
   const money = (v: number) =>
@@ -261,6 +266,26 @@ export default function ProductDetail({ product }: { product: SiteProduct }) {
                   {soldOut ? t("product.soldOut") : t("product.addToCart")}
                 </button>
               </div>
+
+              {/* Buy Now — skips the cart, straight to Shopify checkout */}
+              <button
+                onClick={handleBuyNow}
+                disabled={soldOut || loading}
+                data-cursor="hover"
+                className={`w-full py-4 transition-all duration-300 font-body text-xs font-semibold tracking-widest uppercase flex items-center justify-center gap-3 shadow-lg ${
+                  soldOut
+                    ? "bg-stone/60 text-offwhite cursor-not-allowed"
+                    : "bg-vulcanic text-offwhite hover:bg-ember-mid disabled:opacity-60"
+                }`}
+                style={{ letterSpacing: "0.16em" }}
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Zap className="w-4 h-4" />
+                )}
+                {soldOut ? t("product.soldOut") : t("product.buyNow")}
+              </button>
 
               {/* Support CTA — highest-intent moment: the customer is deciding */}
               <a

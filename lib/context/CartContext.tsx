@@ -18,6 +18,8 @@ interface CartContextProps {
   setIsOpen: (open: boolean) => void;
   /** Adds a Shopify variant to the cart (creates the cart on first add). */
   addToCart: (variantId: string, quantity?: number) => Promise<void>;
+  /** Skips the cart: buys this item alone, straight to Shopify checkout. */
+  buyNow: (variantId: string, quantity?: number) => Promise<void>;
   updateQuantity: (lineId: string, quantity: number) => Promise<void>;
   removeFromCart: (lineId: string) => Promise<void>;
   /** Sends the customer to Shopify's hosted checkout. */
@@ -92,6 +94,23 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [cart, run]
   );
 
+  /**
+   * Buy Now creates a throwaway cart holding only this item and sends the
+   * customer straight to checkout, leaving whatever is in their cart untouched.
+   */
+  const buyNow = useCallback(async (variantId: string, quantity = 1) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const fresh = await createCart([{ merchandiseId: variantId, quantity }]);
+      window.location.href = fresh.checkoutUrl;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erro ao iniciar a compra");
+      setLoading(false);
+    }
+    // On success we leave `loading` on — the page is navigating away.
+  }, []);
+
   const updateQuantity = useCallback(
     async (lineId: string, quantity: number) => {
       if (!cart) return;
@@ -123,6 +142,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         isOpen,
         setIsOpen,
         addToCart,
+        buyNow,
         updateQuantity,
         removeFromCart,
         checkout,
