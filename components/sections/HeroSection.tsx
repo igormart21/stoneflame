@@ -6,15 +6,21 @@ import Image from "next/image";
 import EmberParticles from "@/components/EmberParticles";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+// The two desktop banners have different aspect ratios (1794x877 and 1688x932),
+// so the slot follows each slide instead of cropping the artwork — these are
+// full designs with text running to the edges. Classes are written out in full
+// so Tailwind can see them.
 const banners = [
   {
-    desktop: "/banner-hero.png",
-    mobile: "/banner-hero-mobile.png",
+    desktop: "/banner-1.png",
+    mobile: "/banner-1-mobile.png",
+    aspect: "aspect-[864/1821] md:aspect-[1794/877]",
   },
   {
-    desktop: "/banner-hero-2.png",
-    mobile: "/banner-hero-2-mobile.png",
-  }
+    desktop: "/banner-2.png",
+    mobile: "/banner-2-mobile.png",
+    aspect: "aspect-[864/1821] md:aspect-[1688/932]",
+  },
 ];
 
 export default function HeroSection() {
@@ -42,7 +48,9 @@ export default function HeroSection() {
       className="w-full relative mt-16 md:mt-[4.5rem] bg-bg overflow-hidden group/hero"
     >
       {/* ── Slider Container ────────────────────────── */}
-      <div className="w-full relative aspect-[864/1821] md:aspect-[1794/876] z-0 overflow-hidden select-none">
+      <div
+        className={`w-full relative z-0 overflow-hidden select-none transition-[aspect-ratio] duration-700 ${banners[current].aspect}`}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
