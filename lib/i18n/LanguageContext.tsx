@@ -42,12 +42,27 @@ function lookup(obj: unknown, path: string[]): unknown {
   }, obj);
 }
 
+/**
+ * The store sells in Brazil, so the site is Portuguese-only and the language
+ * selector is hidden. The English dictionary is kept so a second locale can be
+ * switched back on by flipping this to `true` and restoring <LanguageSelector />.
+ */
+const MULTI_LANGUAGE = false;
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [lang, setLangState] = useState<Lang>("pt");
 
   // Resolve language after mount (avoids hydration mismatch):
   // 1) ?lang= query param, 2) saved preference
   useEffect(() => {
+    if (!MULTI_LANGUAGE) {
+      // Clear any stale "en" preference — with no selector, a visitor who
+      // once picked English would otherwise be stuck there forever.
+      localStorage.removeItem("stoneflame_lang");
+      document.documentElement.lang = "pt-BR";
+      return;
+    }
+
     const param = new URLSearchParams(window.location.search).get("lang");
     const stored = localStorage.getItem("stoneflame_lang");
     let resolved: Lang = "pt";

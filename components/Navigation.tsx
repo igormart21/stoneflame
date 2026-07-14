@@ -9,7 +9,6 @@ import { useCart } from "@/lib/context/CartContext";
 import { useT } from "@/lib/i18n/LanguageContext";
 import { ShoppingCart, Search } from "lucide-react";
 import SearchModal from "@/components/SearchModal";
-import LanguageSelector from "@/components/LanguageSelector";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -88,7 +87,6 @@ export default function Navigation() {
 
           {/* Search + Cart Button (Desktop) */}
           <div className="hidden md:flex items-center gap-1">
-            <LanguageSelector />
             <button
               onClick={() => setSearchOpen(true)}
               data-cursor="hover"
@@ -114,7 +112,6 @@ export default function Navigation() {
 
           {/* Search, Cart & Hamburger (Mobile) */}
           <div className="flex items-center gap-1 md:hidden">
-            <LanguageSelector variant="mobile" />
             <button
               onClick={() => setSearchOpen(true)}
               data-cursor="hover"
