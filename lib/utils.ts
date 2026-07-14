@@ -6,22 +6,20 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const WHATSAPP_NUMBER = "5511997115117";
-export const WHATSAPP_BASE_MESSAGE_EN =
-  "Hello, I would like more information about this StoneFlame cookware.";
-export const WHATSAPP_BASE_MESSAGE_PT =
+
+// The store is Brazil-only, so every WhatsApp message goes out in Portuguese.
+export const WHATSAPP_BASE_MESSAGE =
   "Olá, gostaria de mais informações sobre as panelas de pedra StoneFlame.";
 
-export function getWhatsAppLink(message?: string, lang?: string) {
-  const defaultMsg = lang === "pt" ? WHATSAPP_BASE_MESSAGE_PT : WHATSAPP_BASE_MESSAGE_EN;
-  const text = encodeURIComponent(message ?? defaultMsg);
+export function getWhatsAppLink(message?: string) {
+  const text = encodeURIComponent(message ?? WHATSAPP_BASE_MESSAGE);
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
 }
 
-export function getProductWhatsAppLink(productName: string, lang?: string) {
-  const msg = lang === "pt"
-    ? `Olá, tenho interesse no StoneFlame *${productName}*. Poderia me passar mais informações?`
-    : `Hello, I am interested in the StoneFlame *${productName}*. Could you please provide more information?`;
-  return getWhatsAppLink(msg, lang);
+export function getProductWhatsAppLink(productName: string) {
+  return getWhatsAppLink(
+    `Olá, tenho interesse no *${productName}*. Poderia me passar mais informações?`
+  );
 }
 
 // Checkout now happens on Shopify (see lib/shopify/cart.ts). WhatsApp is kept

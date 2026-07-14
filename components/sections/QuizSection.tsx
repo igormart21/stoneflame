@@ -54,9 +54,7 @@ export default function QuizSection() {
   const reset = () => { setStep(0); setAns1(""); setAns2(""); };
 
   const waMsg = rec
-    ? (lang === "pt"
-        ? `Olá! Fiz o teste da StoneFlame e minha recomendação é a *${rec.name}*. Gostaria de encomendar uma!`
-        : `Hello! I took the StoneFlame quiz and my recommendation is the *${rec.name}*. I'd love to order one!`)
+    ? `Olá! Fiz o teste da StoneFlame e minha recomendação é a *${rec.name}*. Gostaria de saber mais!`
     : undefined;
 
   return (
@@ -162,7 +160,7 @@ export default function QuizSection() {
                   <p className="font-body text-sm text-stone mb-6">{rec.desc}</p>
 
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                    <a href={getWhatsAppLink(waMsg, lang)} target="_blank" rel="noopener noreferrer"
+                    <a href={getWhatsAppLink(waMsg)} target="_blank" rel="noopener noreferrer"
                       data-cursor="hover"
                       className="font-body text-xs tracking-widest uppercase px-8 py-4 bg-vulcanic text-offwhite hover:bg-bronze transition-colors duration-300"
                       style={{letterSpacing:"0.16em"}}>
