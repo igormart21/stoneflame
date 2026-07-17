@@ -20,45 +20,48 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+// Canonical site URL — used for SEO metadata and structured data.
+const SITE_URL = "https://stoneflame.com.br";
+const SITE_TITLE = "STONEFLAME | Panelas de Pedra-Sabão Artesanais";
+const SITE_DESCRIPTION =
+  "Panelas de pedra-sabão artesanais premium para uma cozinha mais saudável, autêntica e durável. Pedra 100% natural, feita à mão.";
+
 export const metadata: Metadata = {
-  title: "STONEFLAME | Handcrafted Stone Cookware",
-  description:
-    "Premium handcrafted stone cookware for fire cooking, BBQ, and authentic culinary experiences. 100% natural stone, made by hand.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   keywords: [
-    "stone cookware",
-    "rustic cookware",
-    "handmade cookware",
-    "outdoor cooking",
-    "fire cooking pot",
-    "stone pot",
-    "artisanal cookware",
-    "volcanic stone pan",
+    "panela de pedra",
+    "panela de pedra-sabão",
+    "panela de pedra sabão",
+    "panelas artesanais",
+    "panela de pressão de pedra",
+    "pedra-sabão",
+    "panela mineira",
+    "cozinha saudável",
   ],
   authors: [{ name: "STONEFLAME" }],
   creator: "STONEFLAME",
   publisher: "STONEFLAME",
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://stoneflame.com",
+    locale: "pt_BR",
+    url: SITE_URL,
     siteName: "STONEFLAME",
-    title: "STONEFLAME | Handcrafted Stone Cookware",
-    description:
-      "Premium handcrafted stone cookware for fire cooking, BBQ, and authentic culinary experiences.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "STONEFLAME Stone Cookware",
+        alt: "STONEFLAME — Panelas de Pedra-Sabão",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "STONEFLAME | Handcrafted Stone Cookware",
-    description:
-      "Premium handcrafted stone cookware for fire cooking and authentic culinary experiences.",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: ["/og-image.jpg"],
   },
   robots: {
@@ -72,7 +75,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  metadataBase: new URL("https://stoneflame.com"),
+  metadataBase: new URL(SITE_URL),
 };
 
 export const viewport: Viewport = {
@@ -95,19 +98,19 @@ export default function RootLayout({
               "@type": "Store",
               name: "STONEFLAME",
               description:
-                "Premium handcrafted stone cookware for fire cooking and authentic culinary experiences.",
-              url: "https://stoneflame.com",
+                "Panelas de pedra-sabão artesanais para uma cozinha mais saudável, autêntica e durável.",
+              url: SITE_URL,
               telephone: "+5511997115117",
               priceRange: "$$$",
-              servesCuisine: "Artisanal Cookware",
+              servesCuisine: "Panelas Artesanais",
               hasOfferCatalog: {
                 "@type": "OfferCatalog",
-                name: "Stone Cookware Collection",
+                name: "Coleção de Panelas de Pedra-Sabão",
                 itemListElement: [
                   {
                     "@type": "Product",
-                    name: "Volcanic Stone Pot",
-                    description: "Handcrafted volcanic stone pot for fire cooking",
+                    name: "Panela de Pedra-Sabão",
+                    description: "Panela de pedra-sabão artesanal para uma cozinha saudável",
                     brand: { "@type": "Brand", name: "STONEFLAME" },
                   },
                 ],
