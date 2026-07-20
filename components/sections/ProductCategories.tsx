@@ -103,10 +103,10 @@ export default function ProductCategories({ activeCategory, setActiveCategory }:
   const { lang } = useLanguage();
 
   return (
-    <section 
-      id="categories" 
+    <section
+      id="categories"
       ref={containerRef}
-      className="bg-bg py-16 border-b border-stone-border/30 relative"
+      className="bg-bg py-16 border-b border-stone-border/30 relative scroll-mt-20 md:scroll-mt-24"
     >
       <div className="container-xl">
         {/* Title */}

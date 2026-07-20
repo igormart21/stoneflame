@@ -39,6 +39,11 @@ export default function HeroSection() {
     setCurrent((prev) => (prev + 1) % banners.length);
   };
 
+  // Clicking a banner takes the visitor to the "Compre por Categoria" section.
+  const goToCategories = () => {
+    document.getElementById("categories")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section
       id="hero"
@@ -78,6 +83,15 @@ export default function HeroSection() {
 
         {/* Subtle vignette overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-transparent pointer-events-none" />
+
+        {/* Clickable layer — scrolls to categories. Sits below the arrows/dots
+            (z-20) so slider navigation keeps working on top of it. */}
+        <button
+          onClick={goToCategories}
+          aria-label="Compre por Categoria"
+          data-cursor="hover"
+          className="absolute inset-0 z-10 w-full h-full cursor-pointer"
+        />
 
         {/* ── NAVIGATION CONTROLS (Arrows) ────────────── */}
         <button
